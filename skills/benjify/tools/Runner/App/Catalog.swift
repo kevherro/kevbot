@@ -11,6 +11,7 @@ struct Catalog {
 
   static let entries: [Entry] = [
     Entry(name: "hello", view: AnyView(HelloScene())),
+    Entry(name: "lab-sweep", view: AnyView(SweepLab())),
   ]
 
   static func entry(_ name: String) -> Entry? { entries.first { $0.name == name } }

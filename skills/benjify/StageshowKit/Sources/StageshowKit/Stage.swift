@@ -70,6 +70,7 @@ public struct Stage<S: Equatable, Content: View, Overlay: View>: View {
   @State private var onScreen = false
   @State private var scrollVisible = true
   @Environment(\.accessibilityReduceMotion) private var reduceMotion
+  @Environment(\.stageReduceMotionOverride) private var reduceMotionOverride
   @State private var foreground = UIApplication.shared.applicationState != .background
   @Environment(\.colorScheme) private var scheme
   @Environment(\.stageRecorder) private var recorder
@@ -120,7 +121,7 @@ public struct Stage<S: Equatable, Content: View, Overlay: View>: View {
     _model = State(initialValue: StageModel(state: initial))
   }
 
-  private var still: Bool { script == nil || reduceMotion }
+  private var still: Bool { script == nil || (reduceMotionOverride ?? reduceMotion) }
 
   private var layout: StageLayout {
     guard let compact, let width, width < compact.below else { return .wide }
@@ -133,6 +134,7 @@ public struct Stage<S: Equatable, Content: View, Overlay: View>: View {
     RunKey(run: !still && !model.done && onScreen && scrollVisible && foreground && width != nil, still: still, layout: layout)
   }
 
+  /// The stage: its design scaled to the container's width.
   public var body: some View {
     let design = self.design
     let scale = width.map { min(1, $0 / design.width) } ?? 1
@@ -356,7 +358,10 @@ private struct StageProbe<S: Equatable>: UIViewRepresentable {
     model.view = v
     return v
   }
-  func updateUIView(_ view: UIView, context: Context) { model.view = view }
+  func updateUIView(_ view: UIView, context: Context) {
+    model.view = view
+    if view.window != nil, model.recorder?.view == nil { model.recorder?.view = view }
+  }
 }
 
 extension EnvironmentValues {
@@ -364,6 +369,8 @@ extension EnvironmentValues {
   @Entry public var stagePressed: Set<String> = []
   @Entry var stageInstantScopes: Set<String> = []
   @Entry var stageInstant: Bool = false
+  // Tests stand in for the system Reduce Motion setting with this.
+  @Entry var stageReduceMotionOverride: Bool? = nil
 }
 
 func debugLog(_ s: @autoclosure () -> String) {

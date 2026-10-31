@@ -55,3 +55,54 @@ traps at launch in `_UIApplicationEvaluateRuntimeIssueForNoSceneLifecycleAdoptio
 `--console-pty` both capture stdout (changed: the spike saw nothing from
 `--console-pty`). Unflushed stdout is lost when the app is terminated;
 the kit writes diagnostics to stderr.
+
+## Runtime behavior
+
+`tools/Runner/Tests/ActTests.swift` and `StageTests.swift` hold one test
+per behavior of upstream `act.ts` and `stage.tsx` that a script or host
+can observe (set, put, snap and scoped snap, wait on the injected clock
+and speed, rect, center for each target form, move and its path, click
+and double click with the finger and `stagePressed`, drag, type, stagger,
+mark, place, enter, the rest point each run, cancellation; fit, never
+growing, compact, poster without a script and under Reduce Motion, loop,
+once, scrolling off and back, background and foreground, Dynamic Type,
+several stages). `TimingTests.waitOvershoot` guards wait accuracy:
+1.6–8.6ms late per 500ms wait with an animation running.
+
+Waits sleep with zero tolerance. With the default tolerance, marks 500ms
+apart landed 522ms apart (3 runs, median); with zero, 502ms.
+
+A hidden `UIWindow` sends no `onDisappear`, so a stage in one keeps
+running; removing the stage from the hierarchy cancels its run.
+
+## The recorder
+
+`bash tools/recorder-check.sh <udid> <dir>` records the screen with
+`simctl io recordVideo` while the sweep lab (a bar at a constant 100pt/s,
+a mark every 500ms) plays, crops each video frame to the stage
+(`stage.json`), and finds every mark's still in the video by the bar's
+position.
+
+| Measure (3 runs) | Result |
+| --- | --- |
+| Stills found in the outside video | 8/8 per run, bar position off by 0.00pt |
+| Mark spacing, video clock minus stage clock | −24 to +71ms per 500ms interval (12 intervals; median about 10ms) |
+| Outside video frame rate | 44–45fps on a 60Hz simulator display |
+
+The video drops about a quarter of the display's frames and stamps them
+itself, so the timing bound is the video's, not the recorder's. Marks
+taken after the bar stopped are excluded (a resting bar matches any later
+frame).
+
+`bash tools/slowdown.sh <udid> <dir> 3` measures what recording costs, from
+a `CADisplayLink` meter in the runner over the 3s sweep:
+
+| Mode (3 runs each) | Frame interval median / p95 | Frames over 1.5× median | Mark spacing (want 500ms) | Main-actor capture |
+| --- | --- | --- | --- | --- |
+| Marks only (`stills: false`) | 16.7 / 16.7ms | 0.0% | 502ms | none |
+| Mark stills (default) | 16.7 / 16.7ms | 2.7% | 528ms | 25ms median, 30ms p95 (n=24) |
+| Every frame (`startFrames()`) | 16.7 / 26.2ms | 6.1% | 517ms | 9.9ms median, 12.3ms p95 (n=775) |
+
+The limiter is the `drawHierarchy` call on the main actor; PNG encoding
+and JSON writes run on a background queue. Each still delays the script
+by its capture time, so record parity runs with `stills: false`.

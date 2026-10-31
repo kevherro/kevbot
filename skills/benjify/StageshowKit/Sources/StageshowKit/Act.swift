@@ -351,6 +351,6 @@ struct ClockBox: Sendable {
 
   private init<C: Clock<Duration>>(_ c: C, start: C.Instant) {
     elapsed = { start.duration(to: c.now) }
-    sleep = { d in try await c.sleep(for: d) }
+    sleep = { d in try await c.sleep(for: d, tolerance: .zero) }
   }
 }

@@ -9,7 +9,10 @@ import SwiftUI
 //   -record <dir>     save each mark's still and marks.json under <dir>
 //                     (relative paths land in the app's Documents)
 //   -frames           also save every frame (recorder cross-check)
+//   -nostills         record marks and rects only, no capture
 //   -dark / -light    force a color scheme
+//   -meter            log display-frame timestamps to <dir>/meter.json
+//                     (written every second; needs -record)
 @main
 struct RunnerApp: App {
   var body: some Scene {
@@ -20,6 +23,7 @@ struct RunnerApp: App {
 struct Root: View {
   private let args = Launch(ProcessInfo.processInfo.arguments)
   @State private var recorder: StageRecorder?
+  @State private var meter: FrameMeter?
 
   var body: some View {
     Group {
@@ -33,10 +37,23 @@ struct Root: View {
     .preferredColorScheme(args.scheme)
     .onAppear {
       guard let dir = args.record else { return }
-      let r = StageRecorder(directory: dir)
+      let r = StageRecorder(directory: dir, stills: !args.nostills)
       recorder = r
       if args.frames { r.startFrames() }
-      print("[runner] recording to \(dir.path)")
+      if args.meter {
+        let m = FrameMeter(url: dir.appending(path: "meter.json"))
+        m.start()
+        meter = m
+      }
+      FileHandle.standardError.write(Data("[runner] recording to \(dir.path)\n".utf8))
+    }
+    .task {
+      // The app is killed, not quit, so flush what was measured every second.
+      while !Task.isCancelled {
+        try? await Task.sleep(for: .seconds(1))
+        meter?.write()
+        if args.frames { recorder?.flushCaptures() }
+      }
     }
   }
 }
@@ -45,6 +62,8 @@ struct Launch {
   var scene: String?
   var record: URL?
   var frames = false
+  var meter = false
+  var nostills = false
   var scheme: ColorScheme?
 
   init(_ argv: [String]) {
@@ -58,6 +77,8 @@ struct Launch {
           record = p.hasPrefix("/") ? URL(filePath: p) : docs.appending(path: p)
         }
       case "-frames": frames = true
+      case "-meter": meter = true
+      case "-nostills": nostills = true
       case "-dark": scheme = .dark
       case "-light": scheme = .light
       default: break
