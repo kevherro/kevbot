@@ -1,6 +1,7 @@
 | Skill | Description |
 | --- | --- |
 | `/benchmark-checklist` | Vet a performance measurement before you report or act on it: limiter, tuning, physical limits, errors, repeatability, relevance, and whether the work ran. |
+| `/benjify` | Build miniature, animated product-UI scenes inside an iPhone app with SwiftUI: onboarding, feature explainers, empty states. |
 | `/bro` | Restate the last assistant message in plain language. |
 | `/correct` | Turn the mistakes agents repeat in this repo into ones they cannot make, preferring the strongest enforcement that fits. |
 | `/create-formal-verification-skill` | Write a repo-local formal-<area> skill that machine-checks one high-stakes promise tests rarely exercise, using the verifier that fits the question. |
