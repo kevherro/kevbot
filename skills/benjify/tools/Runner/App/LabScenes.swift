@@ -23,10 +23,11 @@ struct SweepLab: View {
     } content: { s, _ in
       ZStack(alignment: .topLeading) {
         Color.white
+        // Measured where it is drawn: the target is inside the offset.
         Rectangle().fill(.black).frame(width: 8, height: 120)
+          .target("bar")
           .offset(x: s.go ? 320 : 20, y: 20)
           .animation(.linear(duration: 3), value: s.go)
-          .target("bar")
       }
     }
   }

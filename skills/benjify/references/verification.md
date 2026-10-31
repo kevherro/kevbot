@@ -106,3 +106,32 @@ a `CADisplayLink` meter in the runner over the 3s sweep:
 The limiter is the `drawHierarchy` call on the main actor; PNG encoding
 and JSON writes run on a background queue. Each still delays the script
 by its capture time, so record parity runs with `stills: false`.
+
+## Parity with upstream
+
+`bash tools/parity/parity.sh <udid> <example> <dir> [runs=5]` films the
+real upstream playground (`?capture=<example>`, native clocks, headless
+Chrome at the example's compact width) and the SwiftUI port (runner
+scene of the same name, marks only), then compares them with
+`tools/parity/compare.py`. `tools/parity/examples.json` names, per
+example, the width, extra elements to measure beside `data-target`s, and
+an origin element when the comparison covers part of the stage.
+
+The comparison checks, in order: the same marks in order; the same
+target names at each mark (zero-size counts as absent, as `display:none`
+measures on the web); every rect; every mark time from the first mark.
+Each side's noise is the largest distance of any run from that side's
+per-value median. Rect tolerance: 1.5× the larger side's noise + 0.5pt
+(Chrome lays out at 1/64px, SwiftUI at 1/3pt). Time tolerance: 1.5× the
+larger noise + 16.7ms (both sides land marks on display frames).
+
+Self-checks (5 runs each; `compare.py --self-test` splits the runs in
+two, then moves the first target 5pt):
+
+| Runs | Noise rect / time | Tolerance | Self | Target moved 5pt |
+| --- | --- | --- | --- | --- |
+| Web `payout-flow`, 390 wide | 0.06pt / 2.8ms | 0.59pt / 21ms | pass (0.00pt, 1.5ms) | fails |
+| Web `form-error`, 390 wide | 0.00pt / 3.8ms | 0.50pt / 22ms | pass (0.00pt, 4.5ms) | fails |
+| SwiftUI sweep lab (a target moving 100pt/s) | 1.67pt / 4.8ms | 3.00pt / 24ms | pass (0.83pt, 4.9ms) | fails |
+
+A moving target's noise is one frame of its motion (100pt/s × 16.7ms).
