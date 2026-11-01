@@ -9,6 +9,7 @@ import SwiftUI
 //   -record <dir>     save each mark's still and marks.json under <dir>
 //                     (relative paths land in the app's Documents)
 //   -frames           also save every frame (recorder cross-check)
+//   -frames-for <s>   stop saving frames after <s> seconds
 //   -nostills         record marks and rects only, no capture
 //   -still-after <s>  save the stage as drawn after <s> seconds, as still.png
 //   -dark / -light    force a color scheme
@@ -40,7 +41,12 @@ struct Root: View {
       guard let dir = args.record else { return }
       let r = StageRecorder(directory: dir, stills: !args.nostills)
       recorder = r
-      if args.frames { r.startFrames() }
+      if args.frames {
+        r.startFrames()
+        if let s = args.framesFor {
+          Task { @MainActor in try? await Task.sleep(for: .seconds(s)); r.stopFrames() }
+        }
+      }
       if args.meter {
         let m = FrameMeter(url: dir.appending(path: "meter.json"))
         m.start()
@@ -68,6 +74,7 @@ struct Launch {
   var scene: String?
   var record: URL?
   var frames = false
+  var framesFor: Double?
   var meter = false
   var nostills = false
   var stillAfter: Double?
@@ -84,6 +91,7 @@ struct Launch {
           record = p.hasPrefix("/") ? URL(filePath: p) : docs.appending(path: p)
         }
       case "-frames": frames = true
+      case "-frames-for": framesFor = it.next().flatMap(Double.init)
       case "-meter": meter = true
       case "-nostills": nostills = true
       case "-still-after": stillAfter = it.next().flatMap(Double.init)

@@ -91,7 +91,21 @@ nonisolated struct SpringProbe: ViewModifier, Animatable {
   func body(content: Content) -> some View { content.offset(x: x) }
 }
 
-@MainActor final class FrameLog { var frames: [(Double, Double)] = [] }
+// Each value is stamped with the target time of the display frame it is
+// drawn for (SwiftUI evaluates animations for that time), not the moment
+// the setter runs: the latter jitters by milliseconds.
+@MainActor final class FrameLog: NSObject {
+  var frames: [(Double, Double)] = []
+  var target = CACurrentMediaTime()
+  private var link: CADisplayLink?
+  func start() {
+    let l = CADisplayLink(target: self, selector: #selector(tick(_:)))
+    l.add(to: .main, forMode: .common)
+    link = l
+  }
+  func stop() { link?.invalidate() }
+  @objc func tick(_ l: CADisplayLink) { target = l.targetTimestamp }
+}
 
 struct SpringView: View {
   @ObservedObject var t: Toggle
@@ -108,8 +122,9 @@ struct CurveSpike {
   @Test func springValueMatchesWhatSwiftUIDraws() async {
     let spring = Spring(duration: 0.6, bounce: 0.3)
     let t = Toggle(), log = FrameLog()
+    log.start()
     let w = Host.show(SpringView(t: t, log: log))
-    defer { w.isHidden = true }
+    defer { w.isHidden = true; log.stop() }
     await Host.pause(300)
     log.frames = []
     withAnimation(.spring(spring)) { t.on = true }
@@ -126,8 +141,10 @@ struct CurveSpike {
     }
     print("MEASURE curve.spring frames=\(frames.count) worst=\(String(format: "%.2f", best.worst))pt startOffset=\(String(format: "%.1f", (best.start - first) * 1000))ms")
     #expect(frames.count > 30)
-    // The spike reported about 1pt; ten runs here measured 1.6 to 2.0pt
-    // worst-case after fitting the start (see verification.md).
+    // The spike reported about 1pt. Ten runs here: worst 0.69 to 1.82pt
+    // (stamped with each frame's target time; stamped when the setter ran
+    // it was 0.69 to 2.70pt). The start is fitted in 1ms steps, worth
+    // about 0.45pt at the spring's peak speed (see verification.md).
     #expect(best.worst < 2.5)
   }
 

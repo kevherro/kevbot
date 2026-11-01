@@ -16,6 +16,7 @@ SwiftPM tests run in a bare `xctest` process with no window scene, where
 | `bash tools/test.sh <udid> <log> [-only-testing:...]` | Hosted tests, serially; prints `MEASURE` lines |
 | `bash tools/scene.sh <udid> <scene> <dir> [secs] [-frames] [-dark]` | Show one scene, copy out its mark stills and `marks.json` |
 | `bash tools/poster.sh <udid> <scene> <dir>` | The poster under the system Reduce Motion setting |
+| `bash tools/strip.sh <dir> <from-ms> <to-ms> [every]` | A strip of the frames `scene.sh -frames` saved (about 30fps: each capture costs ~10ms) |
 | `bash tools/spikes/lifecycle.sh <udid>` | Scene-lifecycle and console-capture spike |
 | `bash tools/recorder-check.sh`, `slowdown.sh` | The recorder against `simctl recordVideo`; its frame cost |
 | `bash tools/parity/parity.sh`, `contact-sheet.sh` | Upstream playground against the port |
@@ -39,7 +40,7 @@ SwiftUI change that breaks one fails it by name.
 | `presentationLayerCapturesInFlight` | The presentation layer's `render(in:)` does too | x = 100–103 |
 | `plainLayerRenderStaysAtStart` | Plain `layer.render(in:)` stays at the start | x = 0 |
 | `imageRendererDrawsFinalValuesOnly` | `ImageRenderer` draws final values | x = 200 |
-| `springValueMatchesWhatSwiftUIDraws` | `Spring.value(target:time:)` matches each drawn frame | worst 1.58–1.94pt over 74–75 frames, after fitting the start (8–19ms after `withAnimation`); bar 2.5pt |
+| `springValueMatchesWhatSwiftUIDraws` | `Spring.value(target:time:)` matches each drawn frame | 10 runs, 73–74 frames each: worst 0.69–1.82pt (median 1.6pt), each value stamped with its display frame's `targetTimestamp`, start fitted (13–33ms after `withAnimation`); bar 2.5pt. Stamped when the setter ran instead: 0.69–2.70pt, the excess being timestamp jitter at about 900pt/s |
 | `keyframeTimelineEvaluatesAtAnyTime` | `KeyframeTimeline.value(time:)` at any time | exact |
 | `unitCurveMatchesCSSBezier` | `UnitCurve.bezier` (behind `Ease`) matches CSS `cubic-bezier` | worst 1.3e-6 |
 | `layoutRectsHoldAllInk` | `Text.LayoutKey` character boxes hold all ink | 16859/16859 px |

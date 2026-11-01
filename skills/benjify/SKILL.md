@@ -43,8 +43,11 @@ and judge the result with [review][review].
    upstream CSS boxes exactly: a CSS line box is `size × line-height`
    points tall (`.frame(height:)` on the text); a border is 1pt of height;
    a transition is an `.animation(_:value:)` placed after the modifier it
-   animates. The API and its upstream names:
-   [references/api.md](references/api.md).
+   animates. What the kit does not port (a `Row`, a `Badge`, a status
+   pill) is plain SwiftUI shaped like the golds' own: `PayoutRow` and its
+   pill in `PayoutFlow.swift`. Change a pill's label and color together
+   inside a `Swap`, so its edge never slices the old words. The API and
+   its upstream names: [references/api.md](references/api.md).
 
    ```swift
    Stage(width: 358, height: 420, initial: S(), poster: S(done: true),
@@ -62,7 +65,11 @@ and judge the result with [review][review].
    `snap`, `wait`, `click`, `drag`, `type`, `stagger`, `mark`. Views carry
    their own `.animation(_:value:)`, the way upstream CSS carries
    transitions. Start beats alongside each other with `async let`, never
-   an unstructured `Task` (it would outlive a canceled run).
+   an unstructured `Task` (it would outlive a canceled run). Put
+   `a.mark("name")` at the start of each beat, as upstream does: its still
+   shows the moment before the beat's change. The finger shows only while
+   it touches, so a still of a tap needs a mark inside the press
+   (`async let tap: Void = a.click("row")`, then `a.mark` about 300ms in).
 6. **Set the poster first.** It is what Reduce Motion, VoiceOver users'
    screenshots and most viewers see: the beat that tells the story, with
    the result left on screen.
@@ -73,15 +80,22 @@ and judge the result with [review][review].
    `Entry(name: "my-scene", view: AnyView(MyScene()))`, then:
 
    ```sh
-   bash tools/build.sh <udid>                       # generate, build, install
-   bash tools/scene.sh <udid> my-scene out 12       # mark stills, marks.json, sheet.png
-   bash tools/poster.sh <udid> my-scene out/poster  # the Reduce Motion still
+   bash tools/build.sh <udid>                    # generate, build, install
+   bash tools/scene.sh <udid> my-scene out 12    # out/mark-*.png, marks.json, sheet.png
+   bash tools/poster.sh <udid> my-scene out/poster   # writes out/poster/still.png
+   bash tools/scene.sh <udid> my-scene frames 12 -frames  # every frame
+   bash tools/strip.sh frames 1800 2600 40       # frames/strip.png, a transition
    ```
 
-   Read every still and the poster. Fix the largest visible fault first
-   (framing, hierarchy, motion, polish), then rerun. Before handing over:
-   `bash tools/check-api.sh` and the checks in
-   [references/verification.md](references/verification.md).
+   A still cannot show a pop: strip every transition the story turns on.
+   Fix the largest visible fault first (framing, hierarchy, motion,
+   polish), then rerun. Before handing over, the scene's author owes:
+   every still, the poster and the strips read; `bash tools/appearance.sh
+   <udid> my-scene out/look` (light, dark, and Reduce Motion showing the
+   poster); an `accessibilityLabel` if the scene says something its page
+   does not; and `bash tools/check-api.sh`. The rest of
+   [references/verification.md](references/verification.md) is the
+   kit's own record.
 
 ## Rules the kit enforces or assumes
 

@@ -13,10 +13,22 @@ shift $(( $# < 4 ? $# : 4 ))
 bundle=dev.benjify.runner
 run="rec-$scene-$$"
 xcrun simctl terminate "$udid" "$bundle" >/dev/null 2>&1 || true
-xcrun simctl launch "$udid" "$bundle" -scene "$scene" -record "$run" "$@" >/dev/null
+extra=()
+[[ " $* " == *" -frames "* ]] && extra=(-frames-for "$secs")
+xcrun simctl launch "$udid" "$bundle" -scene "$scene" -record "$run" "$@" "${extra[@]}" >/dev/null
 sleep "$secs"
-xcrun simctl terminate "$udid" "$bundle" >/dev/null 2>&1 || true
 data=$(xcrun simctl get_app_container "$udid" "$bundle" data)
+# Frames are encoded off the main thread and fall behind capture; wait for
+# the backlog to be written before the app is stopped.
+if [[ " $* " == *" -frames "* ]]; then
+  prev=-1
+  while true; do
+    n=$(ls "$data/Documents/$run" 2>/dev/null | grep -c '^frame-' || true)
+    (( n == prev )) && break
+    prev=$n; sleep 3
+  done
+fi
+xcrun simctl terminate "$udid" "$bundle" >/dev/null 2>&1 || true
 mkdir -p "$out"
 cp -R "$data/Documents/$run/." "$out/"
 rm -rf "$data/Documents/$run"
