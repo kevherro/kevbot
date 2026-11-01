@@ -13,9 +13,10 @@ shift $(( $# < 4 ? $# : 4 ))
 bundle=dev.benjify.runner
 run="rec-$scene-$$"
 xcrun simctl terminate "$udid" "$bundle" >/dev/null 2>&1 || true
+# macOS ships bash 3.2, where set -u rejects "${a[@]}" for an empty array.
 extra=()
 [[ " $* " == *" -frames "* ]] && extra=(-frames-for "$secs")
-xcrun simctl launch "$udid" "$bundle" -scene "$scene" -record "$run" "$@" "${extra[@]}" >/dev/null
+xcrun simctl launch "$udid" "$bundle" -scene "$scene" -record "$run" "$@" ${extra[@]+"${extra[@]}"} >/dev/null
 sleep "$secs"
 data=$(xcrun simctl get_app_container "$udid" "$bundle" data)
 # Frames are encoded off the main thread and fall behind capture; wait for

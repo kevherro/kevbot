@@ -30,8 +30,9 @@ and judge the result with [review][review].
 2. **Start from a ported gold.** Copy the closest one from
    [examples/](examples/README.md) and keep its structure: design size, beats,
    parts. `PayoutFlow.swift` is choreography with no cursor;
-   `FormError.swift` is a form with a touch. Film the upstream original
-   beside yours (see [references/verification.md](references/verification.md)).
+   `FormError.swift` is a form with a touch. When porting an upstream
+   example, film the original beside yours (`tools/contact-sheet.sh`,
+   `tools/parity/parity.sh`); a new scene is judged against the gold by eye.
 3. **Add the package.** In Xcode, add the local package at
    `StageshowKit/` in this skill directory (iOS 27.0, iPhone). Import
    `StageshowKit`.
@@ -68,8 +69,10 @@ and judge the result with [review][review].
    an unstructured `Task` (it would outlive a canceled run). Put
    `a.mark("name")` at the start of each beat, as upstream does: its still
    shows the moment before the beat's change. The finger shows only while
-   it touches, so a still of a tap needs a mark inside the press
-   (`async let tap: Void = a.click("row")`, then `a.mark` about 300ms in).
+   it touches, so a still of a tap needs a mark inside the press: move
+   there first (`try await a.move(to: "row")`), start the tap in place
+   (`async let tap: Void = a.click()`: 140ms to touch, then a 100ms
+   press), `a.wait(.milliseconds(190))`, `a.mark("press")`, `try await tap`.
 6. **Set the poster first.** It is what Reduce Motion, VoiceOver users'
    screenshots and most viewers see: the beat that tells the story, with
    the result left on screen.
