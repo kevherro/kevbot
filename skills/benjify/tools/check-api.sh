@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # The public API is what the skill documents, and all of it has DocC.
 # Fails on a public declaration without a /// comment, or whose name does
-# not appear in references/api.md.
+# not appear in references/api.md, or on a link-like Text literal.
 set -euo pipefail
 here="$(cd "$(dirname "$0")/.." && pwd)"
 src="$here/StageshowKit/Sources/StageshowKit"
@@ -20,5 +20,10 @@ for n in $names; do
   case $n in init|subscript|body|callAsFunction) continue ;; esac
   grep -q "\b$n\b" "$api" || { echo "not in api.md: $n"; fail=1; }
 done
+# A Text("...") literal is a localized key with markdown: an email or a URL
+# in it draws as a blue link. Scenes write such words with Text(verbatim:).
+while IFS= read -r hit; do
+  echo "link-like Text literal (use Text(verbatim:)): $hit"; fail=1
+done < <(grep -rnE 'Text\("[^"]*([A-Za-z0-9]@[A-Za-z0-9]|://|www\.)[^"]*"\)' "$here/examples" "$here/tools/Runner/App" "$src" || true)
 [[ $fail == 0 ]] && echo "api ok"
 exit $fail

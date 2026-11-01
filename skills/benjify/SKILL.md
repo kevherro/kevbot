@@ -38,9 +38,26 @@ and judge the result with [review][review].
 4. **Build the scene.** A `Stage` with a design size (and a `compact`
    design for phone columns), `initial` and `poster` state, a `content`
    closure that draws from state, and an `overlay` closure for anything
-   placed from measured rects. Mark what the script measures or taps with
-   `.target("name")`. The API and its upstream names:
+   placed from measured rects (a `Connector`, a note under a card). Mark
+   what the script measures or taps with `.target("name")`. Translate
+   upstream CSS boxes exactly: a CSS line box is `size × line-height`
+   points tall (`.frame(height:)` on the text); a border is 1pt of height;
+   a transition is an `.animation(_:value:)` placed after the modifier it
+   animates. The API and its upstream names:
    [references/api.md](references/api.md).
+
+   ```swift
+   Stage(width: 358, height: 420, initial: S(), poster: S(done: true),
+         play: .once, cursor: StageCursor(at: .point(CGPoint(x: 320, y: 390))),
+         script: { a in
+     try await a.wait(.milliseconds(700))
+     a.mark("send")
+     try await a.click("create")
+     try await a.set { $0.done = true }
+   }) { s, _ in
+     MyForm(s: s)  // a view with .target("create") on its button
+   }
+   ```
 5. **Script it.** An `async` closure that gets an `Act`: `set`, `put`,
    `snap`, `wait`, `click`, `drag`, `type`, `stagger`, `mark`. Views carry
    their own `.animation(_:value:)`, the way upstream CSS carries
@@ -49,10 +66,22 @@ and judge the result with [review][review].
 6. **Set the poster first.** It is what Reduce Motion, VoiceOver users'
    screenshots and most viewers see: the beat that tells the story, with
    the result left on screen.
-7. **Rehearse.** Record the marks with `StageRecorder` and read every
-   still; then run the checks in
-   [references/verification.md](references/verification.md). Fix the
-   largest visible fault first.
+7. **Rehearse in the runner.** `tools/Runner` is an iPhone app that shows
+   one scene per launch (needs Xcode 27, an iOS 27 simulator and
+   `xcodegen`). Put the scene's file in `examples/` (it compiles into the
+   runner), add one line to `tools/Runner/App/Catalog.swift`:
+   `Entry(name: "my-scene", view: AnyView(MyScene()))`, then:
+
+   ```sh
+   bash tools/build.sh <udid>                       # generate, build, install
+   bash tools/scene.sh <udid> my-scene out 12       # mark stills, marks.json, sheet.png
+   bash tools/poster.sh <udid> my-scene out/poster  # the Reduce Motion still
+   ```
+
+   Read every still and the poster. Fix the largest visible fault first
+   (framing, hierarchy, motion, polish), then rerun. Before handing over:
+   `bash tools/check-api.sh` and the checks in
+   [references/verification.md](references/verification.md).
 
 ## Rules the kit enforces or assumes
 
@@ -64,7 +93,11 @@ and judge the result with [review][review].
   `accessibilityLabel:` when the scene says something the surrounding
   text does not; it becomes one image element with that label.
 - Measure with `a.rect(name)` and the overlay's `rects`; never hard-code
-  a position another view owns.
+  a position another view owns. An effect applied before `.target` is left
+  out of its rect; after it, included.
+- Write words with an email or a URL as `Text(verbatim:)`: a string
+  literal is a localized key, and markdown turns those into blue links.
+  `bash tools/check-api.sh` fails on one.
 
 ## Not ported
 

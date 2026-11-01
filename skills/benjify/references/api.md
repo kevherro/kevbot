@@ -38,7 +38,7 @@ Stage(width: 640, height: 400,
 | `accent:` | `accent` | Sets `StageLook.accent` and `accentSoft`. |
 | `accessibilityLabel:` | (none) | `nil` hides the scene from VoiceOver; a label makes it one image element. |
 | `content: (S, StageLayout) -> View` | `children(s, rect, layout)` | Draws from state. Mark views with `.target(name)`. |
-| `overlay: (S, Rects, StageLayout) -> View` | `rect(name)` in `children` | Views placed from measured rects; follows targets while they animate. Targets inside it are not measured. |
+| `overlay: (S, Rects, StageLayout) -> View` | `rect(name)` in `children` | Views placed from measured rects; follows targets while they animate. Its own targets are measured for the script and marks, never passed back to it. |
 | `Script<S>` | `Script<S>` | `@MainActor (Act<S>) async throws -> Void`. |
 | `\.stageLook: StageLook` | `--ss-*` tokens | `light`, `dark` (chosen by the color scheme), `ink(_:)`, `canvas`, `surface`, `raised`, `well`, `line`, `lineFaint`, `text`, `textStrong`, `textFaint`, `accent`, `accentSoft`, `success`, `successSoft`, `successText`, `danger`, `dangerSoft`, `dangerText`, `isDark`, `accent(_:)`. |
 | `.stageShadow(StageShadow)` (`.hero`, `.satellite`) | `--ss-shadow-hero`, `-satellite` | |
@@ -84,6 +84,25 @@ Not ported: `fill`, `ground`, `theme` (the color scheme decides), `palette`,
 Run beats side by side with `async let`; an unstructured `Task` would
 outlive a canceled run. Not ported: `scroll` (no `Scroll` part), `key`,
 `cursor(kind)`, `rect(name, { layout: true })`.
+
+## Parts
+
+Each part reads `\.stageLook`, and skips its own motion when the stage is
+still (Reduce Motion, no script) or inside a `snap`. Assertions from the
+upstream kit reference are tests in `tools/Runner/Tests/PartTests.swift`.
+
+| benjify | upstream | Notes |
+| --- | --- | --- |
+| `Bar(w:h:tone:r:shrink:)` | `Bar` | A line (w > 3h) gives way in a narrow row; a slot keeps its size. |
+| `SceneText("...", filler:size:w:h:tone:wrap:)` | `Text` | Renamed: `Text` is SwiftUI's. Set the font on it; `size` only estimates the minimal bar. |
+| `Icon(.bolt, size:filled:)`, `IconName` | `Icon` | SF Symbols for upstream's names (lucide upstream). `.calendar` has no solid variant. |
+| `Check(on:pending:size:ring:arc:fill:tick:)` | `Check` | Colors restyle it on a filled button (upstream does this in CSS). |
+| `Count(value, duration:stagger:format:)` | `Count` | `duration`/`stagger` are `Duration`. Each digit is its own view: allow about 1pt of drift over four digits against plain text. |
+| `Roll("text", variant:delay:stagger:alignment:)`, `Roll.Variant` (`.roll`, `.fade`) | `Roll` | `alignment: .trailing` is upstream's `align="end"`; no automatic detection. |
+| `Swap(id:duration:) { ... }` | `Swap` | |
+| `Connector(from:to:route:show:radius:dots:arrow:label:labelAt:dashed:)`, `Connector.Route` (`.h`, `.v`, `.straight`, `.step`, `.curve`), `Connector.Dots` (`.end`, `.both`, `.none`) | `Connector` | Put it in the stage's `overlay`, with points from `rects`. `label` is a `String`. |
+| `Field(label:value:placeholder:focused:password:status:)`, `Field.Status` (`.valid`, `.error`) | `Field` | No `chip`, `remove`, `leading`, `trailing`. Aim at it with `.target` on the field or an overlay of the box. |
+| `States(value:align:states:)` | `States` | `states` is ordered pairs, `["hint": view, "error": view]`. |
 
 ## Ease
 

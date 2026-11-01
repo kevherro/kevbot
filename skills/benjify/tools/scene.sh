@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Show one runner scene on a simulator for a while, then copy out what its
-# StageRecorder saved (mark stills, marks.json, frames).
+# StageRecorder saved (mark stills, marks.json, frames), plus sheet.png:
+# the mark stills side by side, labeled.
 #
 #   bash scene.sh <udid> <scene> <out-dir> [seconds=12] [runner args...]
 #
@@ -19,5 +20,14 @@ data=$(xcrun simctl get_app_container "$udid" "$bundle" data)
 mkdir -p "$out"
 cp -R "$data/Documents/$run/." "$out/"
 rm -rf "$data/Documents/$run"
-ls "$out" | grep -c . | xargs printf '%s files in %s\n' "$out" >/dev/null
+shopt -s nullglob
+stills=("$out"/mark-*.png)
+if ((${#stills[@]})) && command -v magick >/dev/null; then
+  args=()
+  for f in "${stills[@]}"; do
+    args+=( \( "$f" -profile "/System/Library/ColorSync/Profiles/sRGB Profile.icc" -resize x800 -gravity south -background white -splice 0x44 \
+      -font /System/Library/Fonts/Helvetica.ttc -pointsize 28 -annotate +0+6 "$(basename "$f" .png | sed 's/^mark-[0-9]*-//')" \) )
+  done
+  magick "${args[@]}" +append "$out/sheet.png" 2>/dev/null || true
+fi
 printf '%s: %s files\n' "$out" "$(ls "$out" | wc -l | tr -d ' ')"

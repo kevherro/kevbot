@@ -15,7 +15,13 @@ SwiftPM tests run in a bare `xctest` process with no window scene, where
 | `bash tools/build.sh <udid>` | Generate the runner (xcodegen), build, install |
 | `bash tools/test.sh <udid> <log> [-only-testing:...]` | Hosted tests, serially; prints `MEASURE` lines |
 | `bash tools/scene.sh <udid> <scene> <dir> [secs] [-frames] [-dark]` | Show one scene, copy out its mark stills and `marks.json` |
+| `bash tools/poster.sh <udid> <scene> <dir>` | The poster under the system Reduce Motion setting |
 | `bash tools/spikes/lifecycle.sh <udid>` | Scene-lifecycle and console-capture spike |
+| `bash tools/recorder-check.sh`, `slowdown.sh` | The recorder against `simctl recordVideo`; its frame cost |
+| `bash tools/parity/parity.sh`, `contact-sheet.sh` | Upstream playground against the port |
+| `bash tools/appearance.sh`, `frames.sh`, `perf.sh` | Fit, theme, Reduce Motion; frame pacing; Instruments |
+| `bash tools/warnings.sh`, `background.sh`, `soak.sh` | Runtime warnings; backgrounding; a 10-minute loop |
+| `bash tools/check-api.sh` | Public API documented and DocC'd; no link-like `Text` literal |
 
 `TEST_RUNNER_BENJIFY_DELIBERATE_FAILURE=1` enables a test that must fail,
 proving the suite can.
@@ -135,3 +141,89 @@ two, then moves the first target 5pt):
 | SwiftUI sweep lab (a target moving 100pt/s) | 1.67pt / 4.8ms | 3.00pt / 24ms | pass (0.83pt, 4.9ms) | fails |
 
 A moving target's noise is one frame of its motion (100pt/s × 16.7ms).
+
+## The gold examples
+
+Measured 2026-10-31 on the iOS 27.0 simulator (24A434), at load
+averages noted per row; the host also ran other sessions' simulators.
+
+### Parity (5 runs a side, compact width 390)
+
+| Example | Load | Noise web / iOS | Tolerance | Worst rect | Worst time | Result |
+| --- | --- | --- | --- | --- | --- | --- |
+| `payout-flow` (3 marks, 8 measured boxes) | 5.1 | 0.06pt, 1.7ms / 0.00pt, 2.3ms | 0.59pt, 20ms | 0.34pt | 0.5ms | pass |
+| `form-error` (4 marks, the form card's boxes) | 5.8 | 0.00pt, 2.9ms / 0.00pt, 2.1ms | 0.50pt, 21ms | 0.00pt | 3.1ms | pass |
+
+Under load 95–157 the same `form-error` comparison saw 80ms (web) and
+169ms (iOS) of mark-time noise, and still agreed within 3.9ms at the
+median: mark-time noise is the host's, not either side's.
+
+Contact sheets (`tools/contact-sheet.sh`): each mark, the web stage the
+moment `data-mark` changes beside the recorder's still, then upstream's
+`--reduced` poster beside the iOS poster under the system Reduce Motion
+setting. iOS stills are Display P3 and are converted to sRGB first.
+
+### Parts
+
+`tools/Runner/Tests/PartTests.swift`: Bar (exact where it fits, gives
+way, slots keep size), SceneText (minimal bar width, filler at realistic
+only, one line), Icon (every name outline and filled draws inside its box;
+`calendar.fill` does not exist and drew nothing until the test caught it),
+Check (pending arc, disc then tick, no spinner left, tick fades intact),
+Count (settles like plain text within 1pt over four digits; only changed
+digits move, last first; 9 to 1 rising passes 0; unit box; jumps in a
+snap), Roll (shared ends hold; words move whole; delay holds), Swap (box
+eases between sizes), Connector (draws from the start, dot after; fades
+intact), Field (ring never moves text; placeholder leaves on the first
+character; caret solid while typing, blinking at rest; error ring; valid
+check; password dots), States (box holds the largest; outgoing mostly gone
+before incoming). The runner's `parts` scene is the specimen sheet.
+
+### Fit, theme, Reduce Motion
+
+`tools/appearance.sh` on the narrowest and widest installed iPhone
+simulators: iPhone 17e (390pt; the 16e is also 390) and iPhone 18 Pro Max
+(440pt; the 17 Pro Max is also 440). Both examples draw at scale 1,
+centered, in light and dark, recording every mark; with the system Reduce
+Motion setting on, no mark is recorded and the poster shows. Scaling down
+is a test (`scalesDownToFitItsContainerAndKeepsDesignCoordinates`: a
+400pt design in a 200pt container is 100pt tall).
+
+### Accessibility
+
+Decorative by default: with no `accessibilityLabel`, the scene is hidden
+from VoiceOver; with one, it is a single image element with that label
+and nothing inside it. `tools/Runner/UITests/AccessibilityTests.swift`
+checks both and runs `performAccessibilityAudit()` on each example,
+labeled and decorative. The decorative audit sets aside only the
+"Potentially inaccessible text" heuristic (the hiding is the design), and
+counts it (1–2 per run). The first build failed all five: a modifier on
+the stage's base view did not reach its overlay, and
+`accessibilityElement(children: .ignore)` still exposed every digit of a
+Count's strips to XCUITest; `accessibilityRepresentation` fixed both.
+
+### Performance
+
+The Animation Hitches and SwiftUI templates do not record on a simulator
+(`Hitches is not supported on this platform`), nor do the graphics
+instruments; the Time Profiler sampled only the first 1.2s after launch.
+On a physical iPhone at 120Hz this is not measured: no device was used.
+In place of them, `tools/frames.sh` reads the runner's own meter
+(CADisplayLink timestamps and main run loop busy spans), 3 runs each,
+load 6–7, 60Hz simulator display:
+
+| Example | Frames | Interval median / p95 / max | Over 25ms | Main thread per frame median / p95 / max |
+| --- | --- | --- | --- | --- |
+| `payout-flow` | 1778 | 16.7 / 16.7 / 33.3ms | 0.11% | 0.76 / 3.01 / 21.77ms |
+| `form-error` | 1773 | 16.7 / 16.7 / 16.7ms | 0.00% | 0.32 / 1.87 / 8.93ms |
+
+## Inside an app
+
+| Check | Tool | Result |
+| --- | --- | --- |
+| Publishing from the reader in containers | `ContainerTests` | 50/50 fresh rects in each of ScrollView, List, LazyVStack, ViewThatFits, a sheet, a NavigationStack push |
+| Runtime warnings | `tools/warnings.sh` | 0 Main Thread Checker reports and 0 SwiftUI runtime issues in `payout-flow`, `form-error`, `hello`, `parts`; both canaries (UIKit off the main thread; state modified during a body) reported |
+| Scrolled off | `ContainerTests.scrolledOffSignals` | Plain stack: only `onScrollVisibilityChange` fires; `LazyVStack`: only `onDisappear` (the view is unloaded first). The stage listens to both. |
+| Background and back | `tools/background.sh` | The run stops when Settings opens over the app and starts from the beginning on return |
+| Several stages | `StageTests.severalStagesRunIndependently` | Each keeps its own marks and timing |
+| A 10-minute loop | `tools/soak.sh` (`lab-soak`: `hello` looping beside `payout-flow`) | 605s, 61 samples, load 5.6: footprint 25.65MB (minutes 1–3) and 25.61MB (minutes 8–10), flat after warm-up; live acts at most 1, pending `set` waiters 0, running scripts at most 1; `leaks`: the same single 32-byte leak at 30s and at 10 minutes, malloc nodes 87,507 to 89,487 |

@@ -14,4 +14,6 @@ node "$here/web-marks.mjs" "$url" "$example" "$out/web.json" "$runs"
 ios=$(bash "$here/ios-marks.sh" "$udid" "$example" "$out/ios" "$runs" "$secs")
 echo "web self:"; python3 "$here/compare.py" --self-test "$out/web.json" | sed 's/^/  /'
 echo "ios self:"; python3 "$here/compare.py" --self-test "$ios" | sed 's/^/  /'
-echo "web vs ios:"; python3 "$here/compare.py" "$out/web.json" "$ios" | sed 's/^/  /'
+origin=$(python3 -c "import json;print(json.load(open('$here/examples.json'))['$example'].get('originTarget') or '')")
+echo "load average: $(sysctl -n vm.loadavg)"
+echo "web vs ios:"; python3 "$here/compare.py" "$out/web.json" "$ios" ${origin:+--origin-b "$origin"} | sed 's/^/  /'

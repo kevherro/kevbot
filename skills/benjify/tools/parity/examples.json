@@ -3,12 +3,22 @@
     "width": 390,
     "seconds": 12,
     "origin": null,
-    "extras": { "balance": ".sp-balance", "button": ".sp-button", "note": ".sp-note" }
+    "extras": {
+      "balance": ".sp-balance",
+      "button": ".sp-button",
+      "note": ".sp-note"
+    },
+    "originTarget": null
   },
   "form-error": {
     "width": 390,
     "seconds": 9,
     "origin": ".fe-card",
-    "extras": { "card": ".fe-card", "email": ".ss-field__box", "lane": ".fe-lane" }
+    "extras": {
+      "card": ".fe-card",
+      "email": ".ss-field__box",
+      "lane": ".fe-lane"
+    },
+    "originTarget": "card"
   }
 }

@@ -1,4 +1,5 @@
 import QuartzCore
+import UIKit
 import StageshowKit
 import SwiftUI
 
@@ -40,11 +41,25 @@ final class FrameMeter {
   private var link: CADisplayLink?
   private var proxy: Proxy?
   private(set) var stamps: [Double] = []
+  // Main thread busy spans: from the run loop waking to it going back to
+  // sleep, as (start, end) in CACurrentMediaTime.
+  private(set) var busy: [[Double]] = []
+  private var woke: Double?
+  private var observer: CFRunLoopObserver?
   private let url: URL
 
   init(url: URL) { self.url = url }
 
   func start() {
+    let o = CFRunLoopObserverCreateWithHandler(nil, CFRunLoopActivity.afterWaiting.rawValue | CFRunLoopActivity.beforeWaiting.rawValue, true, 0) { [weak self] _, activity in
+      MainActor.assumeIsolated {
+        guard let self else { return }
+        let now = CACurrentMediaTime()
+        if activity == .afterWaiting { self.woke = now } else if let w = self.woke { self.busy.append([w, now]); self.woke = nil }
+      }
+    }
+    CFRunLoopAddObserver(CFRunLoopGetMain(), o, .commonModes)
+    observer = o
     let p = Proxy { [weak self] l in self?.stamps.append(l.timestamp) }
     let l = CADisplayLink(target: p, selector: #selector(Proxy.tick(_:)))
     l.preferredFrameRateRange = CAFrameRateRange(minimum: 60, maximum: 120, preferred: 120)
@@ -55,11 +70,38 @@ final class FrameMeter {
 
   func write() {
     try? JSONEncoder().encode(stamps).write(to: url)
+    try? JSONEncoder().encode(busy).write(to: url.deletingLastPathComponent().appending(path: "busy.json"))
   }
 
   private final class Proxy: NSObject {
     let fire: @MainActor (CADisplayLink) -> Void
     init(_ f: @escaping @MainActor (CADisplayLink) -> Void) { fire = f }
     @MainActor @objc func tick(_ l: CADisplayLink) { fire(l) }
+  }
+}
+
+/// Calls UIKit off the main thread on purpose, so warnings.sh can show the
+/// Main Thread Checker is loaded and reporting before trusting its silence.
+struct CheckerCanary: View {
+  var body: some View {
+    Color.white.onAppear {
+      // Through the Objective-C runtime: Swift 6 rightly refuses to call
+      // UIView off the main actor directly.
+      DispatchQueue.global().async {
+        let cls = NSClassFromString("UIView") as! NSObject.Type
+        _ = cls.init().value(forKey: "bounds")
+      }
+    }
+  }
+}
+
+/// Changes @State while SwiftUI draws the body, the mistake SwiftUI warns
+/// about as "Modifying state during view update", so warnings.sh can show
+/// that warning reaches the log it reads.
+struct StateCanary: View {
+  @State private var n = 0
+  var body: some View {
+    let _ = { n += 1 }()
+    Text("\(n)")
   }
 }

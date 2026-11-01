@@ -10,6 +10,7 @@ import SwiftUI
 //                     (relative paths land in the app's Documents)
 //   -frames           also save every frame (recorder cross-check)
 //   -nostills         record marks and rects only, no capture
+//   -still-after <s>  save the stage as drawn after <s> seconds, as still.png
 //   -dark / -light    force a color scheme
 //   -meter            log display-frame timestamps to <dir>/meter.json
 //                     (written every second; needs -record)
@@ -48,6 +49,11 @@ struct Root: View {
       FileHandle.standardError.write(Data("[runner] recording to \(dir.path)\n".utf8))
     }
     .task {
+      guard let after = args.stillAfter, let dir = args.record else { return }
+      try? await Task.sleep(for: .seconds(after))
+      try? recorder?.capture()?.pngData()?.write(to: dir.appending(path: "still.png"))
+    }
+    .task {
       // The app is killed, not quit, so flush what was measured every second.
       while !Task.isCancelled {
         try? await Task.sleep(for: .seconds(1))
@@ -64,6 +70,7 @@ struct Launch {
   var frames = false
   var meter = false
   var nostills = false
+  var stillAfter: Double?
   var scheme: ColorScheme?
 
   init(_ argv: [String]) {
@@ -79,6 +86,7 @@ struct Launch {
       case "-frames": frames = true
       case "-meter": meter = true
       case "-nostills": nostills = true
+      case "-still-after": stillAfter = it.next().flatMap(Double.init)
       case "-dark": scheme = .dark
       case "-light": scheme = .light
       default: break

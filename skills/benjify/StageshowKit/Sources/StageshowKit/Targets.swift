@@ -105,7 +105,10 @@ final class RectStore {
     guard !waiters.isEmpty else { return }
     let ready = waiters.filter { $0.gen <= self.gen }
     waiters.removeAll { $0.gen <= self.gen }
-    for w in ready { w.resume.resume() }
+    for w in ready {
+      Diagnostics.waiters.subtract(1, ordering: .relaxed)
+      w.resume.resume()
+    }
   }
 
   /// Returns once a publish of generation `wanted` or later has arrived.
@@ -117,6 +120,7 @@ final class RectStore {
       try await withCheckedThrowingContinuation { (c: CheckedContinuation<Void, any Error>) in
         if Task.isCancelled { c.resume(throwing: CancellationError()); return }
         waiters.append((id, wanted, c))
+        Diagnostics.waiters.add(1, ordering: .relaxed)
       }
     } onCancel: {
       Task { @MainActor in self.cancel(id) }
@@ -125,6 +129,7 @@ final class RectStore {
 
   private func cancel(_ id: Int) {
     guard let i = waiters.firstIndex(where: { $0.id == id }) else { return }
+    Diagnostics.waiters.subtract(1, ordering: .relaxed)
     waiters.remove(at: i).resume.resume(throwing: CancellationError())
   }
 

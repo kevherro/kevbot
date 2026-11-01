@@ -39,7 +39,8 @@ public struct StageCursor: Sendable, Equatable {
 ///   `.target(_:)` to measure and aim at them.
 /// - `overlay` draws what is placed from measured rects (a connector, a
 ///   note under a card). It runs on every frame the rects change, so it
-///   follows targets while they animate. Targets inside it are not measured.
+///   follows targets while they animate. Targets inside it are measured for
+///   the script and marks, but not passed back to it.
 ///
 /// The script runs only while the stage is on screen and the app is in
 /// the foreground. (Not `scenePhase`: it reads `.background` for a stage
@@ -138,7 +139,7 @@ public struct Stage<S: Equatable, Content: View, Overlay: View>: View {
   public var body: some View {
     let design = self.design
     let scale = width.map { min(1, $0 / design.width) } ?? 1
-    let _ = model.recorder = recorder
+    let _ = attachRecorder()
     Color.clear
       .frame(maxWidth: .infinity)
       .frame(height: design.height * scale)
@@ -148,7 +149,11 @@ public struct Stage<S: Equatable, Content: View, Overlay: View>: View {
           .frame(width: design.width, height: design.height)
           .scaleEffect(scale, anchor: .top)
           .opacity(width == nil ? 0 : 1)
+          // On the scene itself: a modifier on the base view does not reach
+          // into this overlay (XCUITest saw every word of a "hidden" scene).
+          .modifier(StageAccessibility(label: label))
       }
+      .accessibilityHidden(label == nil)
       .onAppear { onScreen = true }
       .onDisappear { onScreen = false }
       .onScrollVisibilityChange(threshold: 0.01) { scrollVisible = $0 }
@@ -158,7 +163,6 @@ public struct Stage<S: Equatable, Content: View, Overlay: View>: View {
       // A removed stage gets no more onChange calls, so stop its run here,
       // unless it reappeared in the same turn (SwiftUI does that on setup).
       .onDisappear { Task { @MainActor in if !onScreen { model.stop() } } }
-      .modifier(StageAccessibility(label: label))
   }
 
   private func scene(_ design: CGSize) -> some View {
@@ -179,17 +183,24 @@ public struct Stage<S: Equatable, Content: View, Overlay: View>: View {
         Color.clear
       }
     }
+    // The overlay gets the content's rects. Its own targets are measured
+    // too (the reader below sees both), but never fed back into it, so
+    // nothing placed from a rect can chase itself.
     .overlayPreferenceValue(TargetsKey.self) { targets in
       GeometryReader { proxy in
-        let rects = Rects(targets.anchors.mapValues { proxy[$0] })
-        let _ = store.publish(gen: targets.gen, rects: rects)
         // Never statically empty: SwiftUI skips a preference reader whose
-        // content is EmptyView, and then nothing would publish.
+        // content is EmptyView.
         ZStack(alignment: .topLeading) {
           Color.clear
-          overlay(model.state, rects, layout)
+          overlay(model.state, Rects(targets.anchors.mapValues { proxy[$0] }), layout)
         }
         .frame(width: design.width, height: design.height, alignment: .topLeading)
+      }
+    }
+    .overlayPreferenceValue(TargetsKey.self) { targets in
+      GeometryReader { proxy in
+        let _ = store.publish(gen: targets.gen, rects: Rects(targets.anchors.mapValues { proxy[$0] }))
+        Color.clear
       }
     }
     .overlay(alignment: .topLeading) {
@@ -202,6 +213,13 @@ public struct Stage<S: Equatable, Content: View, Overlay: View>: View {
     .environment(\.stageStill, still)
     .environment(\.stageLayout, layout)
     .dynamicTypeSize(.large)
+  }
+
+  // A recorder finds the stage's view here as well as at its first mark,
+  // so a still scene (Reduce Motion, a poster) can be captured too.
+  private func attachRecorder() {
+    model.recorder = recorder
+    if let recorder, recorder.view == nil, let v = model.view, v.window != nil { recorder.view = v }
   }
 
   private func reset(to state: S) {
@@ -246,6 +264,8 @@ public struct Stage<S: Equatable, Content: View, Overlay: View>: View {
 
   private func run(_ id: Int) async {
     guard let script else { return }
+    Diagnostics.runs.add(1, ordering: .relaxed)
+    defer { Diagnostics.runs.subtract(1, ordering: .relaxed) }
     model.marks = []
     do {
       // The first publish places targets the cursor's rest point may name.
@@ -341,24 +361,44 @@ struct GenCarrier: View {
 private struct StageAccessibility: ViewModifier {
   let label: String?
   func body(content: Content) -> some View {
-    if let label {
-      content.accessibilityElement(children: .ignore).accessibilityLabel(Text(label)).accessibilityAddTraits(.isImage)
-    } else {
-      content.accessibilityHidden(true)
+    // A representation replaces the scene's whole accessibility tree, so
+    // none of its parts (a Count's digit strips included) leak through.
+    content.accessibilityRepresentation {
+      if let label {
+        Color.clear.accessibilityLabel(Text(label)).accessibilityAddTraits(.isImage)
+      } else {
+        Color.clear.accessibilityHidden(true)
+      }
     }
   }
 }
 
-// Finds the stage's UIKit view, so a recorder can capture its region.
+// Finds the stage's UIKit view, so a recorder can capture its region. It
+// reports itself when it joins a window: a still scene never re-renders.
 private struct StageProbe<S: Equatable>: UIViewRepresentable {
   let model: StageModel<S>
-  func makeUIView(context: Context) -> UIView {
-    let v = UIView()
+
+  final class ProbeView: UIView {
+    var joined: ((UIView) -> Void)?
+    override func didMoveToWindow() {
+      super.didMoveToWindow()
+      if window != nil { joined?(self) }
+    }
+  }
+
+  func makeUIView(context: Context) -> ProbeView {
+    let v = ProbeView()
     v.isUserInteractionEnabled = false
+    let model = self.model
+    v.joined = { view in
+      model.view = view
+      if model.recorder?.view == nil { model.recorder?.view = view }
+    }
     model.view = v
     return v
   }
-  func updateUIView(_ view: UIView, context: Context) {
+
+  func updateUIView(_ view: ProbeView, context: Context) {
     model.view = view
     if view.window != nil, model.recorder?.view == nil { model.recorder?.view = view }
   }

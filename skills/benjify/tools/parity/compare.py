@@ -13,12 +13,15 @@ any of its runs from that side's per-value median. The rect tolerance is
 SwiftUI at 1/3pt on a 3x screen); the time tolerance is 1.5x the larger
 noise plus one 60Hz frame (16.7ms), since both sides land marks on frames.
 
-  python3 compare.py A.json[,A2.json...] B.json[,B2...] [--rect R] [--time T]
+  python3 compare.py A.json[,A2.json...] B.json[,B2...] [--rect R] [--time T] [--origin-b TARGET]
+
+--origin-b measures B's rects from that target (the web side applies its
+origin element while dumping).
   python3 compare.py --self-test A.json[,...]
 """
 import json, statistics, sys
 
-def load(paths):
+def load(paths, origin=None):
     runs = []
     for p in paths.split(","):
         d = json.load(open(p))
@@ -34,6 +37,11 @@ def load(paths):
                     if v["width"] > 0 or v["height"] > 0:
                         rects[k] = v
                 out.append({"name": m["name"], "time": m["time"], "rects": rects})
+            if origin:
+                for m in out:
+                    o = m["rects"].get(origin)
+                    if o:
+                        m["rects"] = {k: {**v, "x": v["x"] - o["x"], "y": v["y"] - o["y"]} for k, v in m["rects"].items()}
             t0 = out[0]["time"] if out else 0
             for m in out:
                 m["time"] -= t0
@@ -115,7 +123,8 @@ def main():
         print(f"self, {k} moved 5pt at {m['name']}: worst {wr2:.2f}pt: {'PASS (should have failed)' if not f2 else 'FAIL as it should'}")
         for x in f2: print("  " + x)
         sys.exit(0 if not f and f2 else 1)
-    a, b = load(args[0]), load(args[1])
+    ob = args[args.index("--origin-b") + 1] if "--origin-b" in args else None
+    a, b = load(args[0]), load(args[1], ob)
     na, nb = noise(a), noise(b)
     rt, tt = tolerances(max(na[0], nb[0]), max(na[1], nb[1]))
     if "--rect" in args: rt = float(args[args.index("--rect") + 1])

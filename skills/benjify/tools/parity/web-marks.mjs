@@ -2,7 +2,11 @@
 // the real playground draws it. Run with the upstream checkout's
 // playwright-core (NODE_PATH or from its directory):
 //
-//   node web-marks.mjs <preview-url> <example> <out.json> [runs=1]
+//   node web-marks.mjs <preview-url> <example> <out.json> [runs=1] [shots-dir]
+//
+// With shots-dir, the first run also saves a PNG of the stage the moment
+// each mark lands (a page screenshot clipped to the stage, no waiting for
+// motion to settle), as <shots-dir>/<mark>.png.
 //
 // Rects are stage pixels (the .ss-stage's own design space), relative to
 // the example's `origin` element when examples.json names one. Times are
@@ -12,7 +16,7 @@ import { createRequire } from 'node:module'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-const [base, example, out, runsArg] = process.argv.slice(2)
+const [base, example, out, runsArg, shots] = process.argv.slice(2)
 const config = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'examples.json'), 'utf8'))[example]
 const require = createRequire(join(process.env.STAGESHOW_DIR ?? process.cwd(), 'package.json'))
 const { chromium } = require('playwright-core')
@@ -20,6 +24,11 @@ const browser = await chromium.launch({ channel: 'chrome' })
 const runs = []
 for (let r = 0; r < Number(runsArg ?? 1); r++) {
   const page = await browser.newPage({ viewport: { width: config.width, height: 900 }, deviceScaleFactor: 2 })
+  if (shots && r === 0) {
+    await page.exposeFunction('__shot', async (name, clip) => {
+      await page.screenshot({ path: join(shots, `${name}.png`), clip, animations: 'allow' })
+    })
+  }
   await page.addInitScript(({ extras, origin }) => {
     window.__marks = []
     const snap = (root, name) => {
@@ -38,6 +47,7 @@ for (let r = 0; r < Number(runsArg ?? 1); r++) {
         for (const k of Object.keys(rects)) { rects[k] = { ...rects[k], x: rects[k].x - or.x, y: rects[k].y - or.y } }
       }
       window.__marks.push({ name, t: performance.now(), rects, scale: s })
+      if (window.__shot) window.__shot(name, { x: box.left + scrollX, y: box.top + scrollY, width: box.width, height: box.height })
     }
     const watch = () => {
       const root = document.querySelector('.ss-stage')

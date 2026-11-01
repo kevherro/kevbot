@@ -49,7 +49,10 @@ public final class Act<S: Equatable> {
     self.speed = speed
     self.finger = finger
     self.onMark = onMark
+    Diagnostics.acts.add(1, ordering: .relaxed)
   }
+
+  deinit { Diagnostics.acts.subtract(1, ordering: .relaxed) }
 
   // MARK: Scene
 
