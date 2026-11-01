@@ -110,6 +110,7 @@ Put that in a user or project instructions file your harness loads.
 | `/benchmark-checklist` | Vet a measured speedup or regression |
 | `/create-formal-verification-skill` | Model-check or prove one risky promise |
 | `/maintain-formal-verification-skill` | That formal check drifted from the code |
+| `/benjify` | Animated product-UI scene in an iPhone app (SwiftUI) |
 
 Playbooks behind `/mestack`: `investigate`, `fix`, `build`,
 `reshape`, `leave-running`.
@@ -130,6 +131,7 @@ skills/create-verification-skill/          owns verify-* contract
 skills/maintain-verification-skill/
 skills/create-formal-verification-skill/   owns formal-* contract
 skills/maintain-formal-verification-skill/
+skills/benjify/                            skill + StageshowKit Swift package (iOS 27)
 agents/mestack-agent.md                    Grok child; no nested spawn
 agents/claude/                             Claude-only reviewer agents
 docs/why.md                                design argument
