@@ -1,6 +1,6 @@
 | Skill | Description |
 | --- | --- |
-| `/benchmark-checklist` | Vet a performance measurement before you report or act on it: limiter, tuning, physical limits, errors, repeatability, relevance, and whether the work ran. |
+| `/benchmark-checklist` | Plan and vet a performance measurement before running or reporting it: limiter, tuning, physical limits, errors, repeatability, relevance, and whether the work ran. |
 | `/benjify` | Build miniature, animated product-UI scenes inside an iPhone app with SwiftUI: onboarding, feature explainers, empty states. |
 | `/bro` | Restate the last assistant message in plain language. |
 | `/correct` | Turn the mistakes agents repeat in this repo into ones they cannot make, preferring the strongest enforcement that fits. |
@@ -10,7 +10,7 @@
 | `/help` | Print a table of the current kevbot skills and a short description of each. |
 | `/how` | Walk through how a subsystem works now, with runtime flow, types, and the non-obvious parts. |
 | `/in-your-own-words` | Play back the user's goal and the problem behind it before any work. |
-| `/interrogate` | Adversarial review of a change by one child per configured reviewer. |
+| `/interrogate` | Adversarial review with reproduced failures, one child per configured reviewer. |
 | `/ketchup` | Bring the user current on this chat since they last wrote, plainly, then lay out each pending call of theirs with what they need to make it without clicking through. |
 | `/kevbot` | Kevin's harness-agnostic engineering dispatcher. |
 | `/maintain-formal-verification-skill` | Re-sync a repo's formal-* checks with code that moved since their last confirmation: read those commits, update the model from the code, rerun, and classify each failure as drift or bug. |
@@ -24,7 +24,7 @@
 | `principle-encode-the-rule` | Encode a repeated instruction as a check, not more prose. |
 | `principle-exhaust-the-design-space` | Try two or three real alternatives when there is no precedent. |
 | `principle-experience-first` | Choose the consumer's result over implementation convenience. |
-| `principle-explain-the-number` | Name what bounds a measured number and what else it could be measuring before you report it. |
+| `principle-explain-the-number` | Plan the decision a measurement will inform, then check its limiter and alternative explanations. |
 | `principle-guard-the-context-window` | Keep bulk out of the parent context. |
 | `principle-make-operations-idempotent` | Retries must land on the same end state. |
 | `principle-migrate-callers-then-delete-legacy-apis` | Migrate callers and delete the old API in one wave. |

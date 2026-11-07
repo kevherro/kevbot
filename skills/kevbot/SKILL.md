@@ -56,7 +56,8 @@ Read the leaf in full when you apply it.
 - **Test behavior** (`principle-test-behavior`). Writing or keeping a
   test. Fails when behavior breaks, survives a refactor.
 - **Explain the number** (`principle-explain-the-number`). Before
-  reporting a measurement. Name the limiter, rule out other readings.
+  measuring or reporting. Plan the decision, then check what the
+  result means.
 - **Parent owns fan-out** (`principle-parent-owns-fan-out`). Any
   parallel work. Children do not spawn children.
 - **Reversible without asking** (`principle-reversible-without-asking`).
@@ -111,8 +112,8 @@ Read the leaf in full when you apply it.
   tests cannot reach the bad case: **create-formal-verification-skill**
   (once per repo), then that project `formal-*` skill. Drifted:
   **maintain-formal-verification-skill**.
-- Measured a speedup or regression: **benchmark-checklist** before
-  reporting it.
+- Planning a performance comparison or evaluating a measured speedup
+  or regression: **benchmark-checklist**.
 - The user corrected the same mistake twice: **correct**.
 - Adversarial review of a change: **interrogate**.
 - Catch-up on recent work: **recall**. Catch-up within this chat:

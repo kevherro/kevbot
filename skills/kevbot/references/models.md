@@ -24,8 +24,8 @@ reviewers:
   `fable`, else `opus`. The first runnable slug wins; report which one
   ran and any skipped. None runnable is a dropout.
 - `reviewers` is an optional comma-separated list. `/interrogate`
-  spawns one read-only child per entry. An empty list means no panel;
-  the parent reviews.
+  spawns one child per entry under its workspace rules. An empty list
+  means no panel; the parent reviews.
 
 ## Resolution
 

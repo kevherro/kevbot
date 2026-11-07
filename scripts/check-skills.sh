@@ -86,7 +86,6 @@ for f in \
   skills/figure-it-out/SKILL.md \
   skills/show-me-your-work/SKILL.md \
   skills/show-me-your-work/scripts/log.sh \
-  skills/interrogate/references/rubric.md \
   skills/interrogate/references/reviewer-brief.md \
   skills/unslop/references/tells.md
 do

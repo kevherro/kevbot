@@ -1,7 +1,8 @@
 ---
 name: interrogate
 description: >
-  Adversarial review of a change by one child per configured reviewer.
+  Adversarial review with reproduced failures, one child per configured
+  reviewer.
   Use for /interrogate, "tear this apart", or "multi-model review".
 disable-model-invocation: true
 argument-hint: diff, files, or branch to review
@@ -9,8 +10,8 @@ argument-hint: diff, files, or branch to review
 
 # Interrogate
 
-Stress a change with independent read-only reviewers. The parent
-judges. Do not auto-apply.
+Find failures in a change or design. The parent reruns the evidence
+before accepting a finding. Do not apply fixes.
 
 The `reviewers` list in the discovered **kevbot** skill's
 `references/models.md` is the panel. Empty list: the parent reviews
@@ -20,27 +21,34 @@ a dropout. Do not substitute an undeclared model.
 
 ## Steps
 
-1. Scope. User-named files or diff if given. Else
-   `git diff <base>...HEAD` including the working tree. Base is
-   `main` unless the repo says otherwise.
+1. Scope. Use the files, diff, or design the user names. Otherwise
+   review from the merge base with the target branch through the
+   working tree. Include relevant staged, unstaged, and untracked
+   files; a branch diff alone omits pending work.
 2. Intent. One paragraph: what this change is for. User message,
    commits, PR body, then the diff. Reviewers challenge fit to
    intent, not the intent itself. If intent is unclear, ask.
-3. Spawn. Parent launches one read-only child per remaining reviewer
-   in one turn, per the **kevbot** skill's `references/harness.md`.
-   Read-only reviewers may share a checkout; they must not write.
-   Same brief for every child: intent, scope, and
-   [references/rubric.md](references/rubric.md). Fill
-   [references/reviewer-brief.md](references/reviewer-brief.md).
-4. Parent reads the diff again. Child summaries are untrusted.
-5. Judge. You have the goal and the constraints. Bucket every
-   finding:
-   - **Act on.** Would block a real merge.
-   - **Consider.** Real, cost unclear.
-   - **Noted.** Valid, not actionable now.
-   - **Dismissed.** Wrong, nit, or missing context. Say why.
-   Consensus (2+ children, same issue) is high-confidence. A lone
-   finding still appears, with its model.
+3. Isolate. Give each reviewer a separate worktree or copy containing
+   the same scoped code and pending edits. Follow the **kevbot**
+   skill's `references/harness.md` for isolation and its fallback.
+   Keep the reviewed source unchanged. Repro scripts, tests, and
+   generated output belong in the reviewer's assigned workspace.
+4. Spawn. Parent launches one child per remaining reviewer in one
+   turn. Fill [references/reviewer-brief.md](references/reviewer-brief.md)
+   with the intent, scope, and that child's workspace. Keep these
+   workspaces until verification finishes. A parent-only review uses
+   the same evidence requirements.
+5. Reproduce. Read each proposed repro and inspect the reviewer's
+   changes before running it against the unchanged scoped source.
+   Rerun its command and compare the observed result with the intent.
+   A command that was not rerun, or a failure caused by a reviewer's
+   source edit, is not a verified finding. Record unavailable tools
+   or prerequisites as verification limits.
+6. Judge. Retain only failures the rerun confirms that violate the
+   intent. Merge duplicates by root cause and credit their reviewers.
+   Agreement between reviewers does not replace a reproduction.
+   Drop style preferences, untested claims, and risks that depend on
+   a hypothetical future change.
 
 **Reply:**
 
@@ -48,10 +56,12 @@ a dropout. Do not substitute an undeclared model.
 > the paragraph from step 2
 
 ### Reviewers
-one bullet each: label, slug or `parent`, finding count, dropouts
+one bullet each: label, slug or `parent`, verified count, dropouts
 
-### Act on / Consider / Noted / Dismissed
-each finding: what, evidence, who raised it, why this bucket
+### Verified findings
+each finding: command and working directory, actual and expected
+output, how it breaks the intent, evidence paths, who found it
 
-### Agreement
-where they agreed, where they split
+### Dropped / Limits
+counts and reasons per reviewer; anything that could not be checked.
+Say "no verified findings" when none survive, alongside those limits.

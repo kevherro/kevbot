@@ -136,6 +136,13 @@ here) and `poteto-help` (`/help` and `/setup-kevbot` cover it). The
 next sync starts from that commit:
 `git log 4ec7ffa..origin/main -- pstack`.
 
+The 2026-11-07 update selectively adapted review verification and
+measurement planning from `ab1f702`, plus durable reflection edits
+from `7054003`. Reproduced failures carry more weight than reviewer
+agreement; choosing a threshold before measuring limits hindsight;
+durable skill copies survive plugin updates. This was a partial
+sync, so the full-review baseline remains `4ec7ffa`.
+
 **Let children spawn.** That matches "a fixer with its own
 reviewer." On Grok it does not run. On Amp it still puts the
 synthesis in a context that has not seen the user's constraints.

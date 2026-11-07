@@ -1,28 +1,28 @@
 ---
 name: benchmark-checklist
 description: >
-  Vet a performance measurement before you report or act on it:
+  Plan and vet a performance measurement before running or reporting it:
   limiter, tuning, physical limits, errors, repeatability, relevance,
-  and whether the work ran. Use for /benchmark-checklist, or before
-  any measured speedup or slowdown leaves your hands.
+  and whether the work ran. Use for /benchmark-checklist, before a
+  performance comparison, or when reviewing a speedup or slowdown.
 disable-model-invocation: true
 argument-hint: the claim or the benchmark command
 ---
 
 # Benchmark checklist
 
-This is the procedure behind **explain-the-number** for performance.
+This is the procedure behind **principle-explain-the-number** for performance.
 Answer each question from a run, not from reading code.
 
 A quick ballpark the user asked for needs one run plus questions 4
-and 7, labeled as one run. Choosing between options is never a
-ballpark.
+and 7, labeled as one run. It still needs the preflight below.
+Choosing between options is never a ballpark.
 
 ## Before running
 
-- Write the sentence you expect to ship, with dataset and percentile:
-  "import is 25% faster at p95 on the 100k-row fixture". Every
-  question below tests that sentence.
+- Apply **principle-explain-the-number** to plan the measurement.
+- Specify the metric, dataset, percentile, and comparison, such as
+  p95 import time on the 100k-row fixture, baseline versus candidate.
 - Read the benchmark script. Note what it times and what it skips.
 - Check machine load (`uptime`) and core count. If something else is
   busy and you cannot stop it, interleave the sides and say so.
@@ -51,8 +51,7 @@ ballpark.
    lacks one.
 5. **Does it reproduce?** At least five runs per side, alternating
    A, B, A, B. Report median and range. A gap inside run-to-run
-   spread is no measured difference. For close calls use a rank-sum
-   test or the harness's statistics.
+   spread is no measured difference.
 6. **Does it matter end to end?** Next to a micro result, measure
    the path a user waits on, at realistic size and concurrency. Give
    the micro piece's share of the whole.

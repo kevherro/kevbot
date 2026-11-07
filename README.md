@@ -89,7 +89,7 @@ Put that in a user or project instructions file your harness loads.
 | `/how` | Walk a subsystem, read-only |
 | `/prove` | Exercise the real artifact |
 | `/figure-it-out` | No narrower playbook fits |
-| `/interrogate` | Adversarial review of a change |
+| `/interrogate` | Reproduce and verify review findings |
 | `/recall` | Catch up on recent work |
 | `/teach` | Explain so a person understands |
 | `/tdd` | Failing check before production code |
@@ -107,7 +107,7 @@ Put that in a user or project instructions file your harness loads.
 | `/in-your-own-words` | Play back the goal before work |
 | `/sharpen` | Rewrite a prompt to ask for a deeper task |
 | `/correct` | Make a repeated agent mistake impossible |
-| `/benchmark-checklist` | Vet a measured speedup or regression |
+| `/benchmark-checklist` | Plan and vet a performance measurement |
 | `/create-formal-verification-skill` | Model-check or prove one risky promise |
 | `/maintain-formal-verification-skill` | That formal check drifted from the code |
 | `/benjify` | Animated product-UI scene in an iPhone app (SwiftUI) |

@@ -1,6 +1,9 @@
 ---
 name: principle-explain-the-number
-description: Name what bounds a measured number and what else it could be measuring before you report it. Used by kevbot for speedups, regressions, latency, and eval results.
+description: >
+  Plan the decision a measurement will inform, then check its limiter
+  and alternative explanations. Used by kevbot before measuring or
+  reporting speedups, regressions, latency, and eval results.
 user-invocable: false
 ---
 
@@ -8,6 +11,16 @@ user-invocable: false
 
 A measured number is a claim about work. Check that the work
 happened and that you know what limited it.
+
+Before collecting results, record the decision, the smallest effect
+that would change it, the expected noise floor, and how you will
+estimate variation. If noise is unknown, calibrate first. If the
+measurement cannot resolve the target effect, improve the experiment
+before comparing options.
+
+After a comparison, if run-to-run spread exceeds the measured
+effect, stop and report no measured difference. Improve the
+experiment before another comparison.
 
 Name the limiter. Which core, lock, disk, network link, or load
 generator kept the number from being twice as good? Get it from a
@@ -26,9 +39,9 @@ For performance numbers, run **benchmark-checklist**. For an eval,
 ask whether every trial did the task and whether the gap holds
 across trials and models.
 
-Signs this was skipped: a number reported without how many runs,
-how much they varied, or what bounded them. Or a claimed saving that
-exceeds the whole cost of the part you changed.
+Signs this was skipped: measuring without a decision or threshold,
+or reporting without a run count, spread, or limiter. Or a claimed
+saving that exceeds the whole cost of the part you changed.
 
 **prove-on-the-artifact** checks that an output is real. This checks
 that a measurement means what you say.

@@ -31,13 +31,27 @@ parent followed.
    Spot-check citations. A lesson that a lint, test, or script would
    enforce better is Backlog, not a prose bullet
    (**encode-the-rule**).
-4. Show the three lists. Wait. Skill edits change every later
-   session; do not auto-apply.
-5. For each approved Accepted item, follow its routing:
-   - Trivial edit to an existing skill: parent, in that skill's home.
-   - Substantive edit or new skill: still the parent, in the pack or
-     the current repo's skill dir. Do not invent a second generator.
-   Run `./scripts/check-skills.sh` when the edit is in this pack.
+4. Choose a durable destination for each Accepted item: a source
+   checkout in scope, or a project/user skill directory that the
+   current harness discovers. Resolve symlinks before choosing.
+   Never edit a managed installed copy or plugin cache, including
+   through a symlink. For a cached skill without a source checkout,
+   plan to copy its whole folder so references and scripts survive.
+   If the destination already exists, read it and reconcile the
+   proposed edit there; do not overwrite it with the cached copy.
+5. Show the three lists, each proposed edit, and its exact destination
+   before approval. Wait. Skill edits change every later session;
+   do not auto-apply. If no durable, discoverable destination is
+   known, ask for that location before requesting approval.
+6. Apply approved Accepted items in their approved destinations.
+   Copy cached folders only after approval, then edit the copies.
+   The parent makes both trivial and substantive edits. Do not
+   invent a second generator. Run `./scripts/check-skills.sh` for
+   changes in this pack. For a local override, confirm discovery
+   selects it; if this requires a reload, report that pending step.
 
-**Reply:** applied edits, new skills, backlog, dropped findings with
-the synthesizer's reason.
+Do not infer publishing permission from a plugin's repository field.
+Commits, pushes, and PRs follow the **kevbot** skill's action permissions.
+
+**Reply:** applied edits and destination paths, new skills, discovery
+status, backlog, dropped findings with the synthesizer's reason.
