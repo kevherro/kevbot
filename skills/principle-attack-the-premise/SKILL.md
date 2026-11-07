@@ -1,6 +1,6 @@
 ---
 name: principle-attack-the-premise
-description: Two fixes on one belief failed the same check; test the belief before a third. Used by mestack when retries stop converging.
+description: Two fixes on one belief failed the same check; test the belief before a third. Used by kevbot when retries stop converging.
 user-invocable: false
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: principle-sequence-verifiable-units
-description: End each small unit in a check before starting the next. Used by mestack for sweeps, migrations, and commit order.
+description: End each small unit in a check before starting the next. Used by kevbot for sweeps, migrations, and commit order.
 user-invocable: false
 ---
 

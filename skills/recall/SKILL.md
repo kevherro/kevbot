@@ -13,7 +13,7 @@ Before starting or resuming, rebuild where the work stands. Hand back
 a short brief. Do not start the work in this skill.
 
 Resolve session access and missing-history fallbacks through
-the discovered **mestack** skill's `references/harness.md`.
+the discovered **kevbot** skill's `references/harness.md`.
 
 ## Steps
 
@@ -23,7 +23,7 @@ the discovered **mestack** skill's `references/harness.md`.
    workspace. Say the scope. Do not quietly shrink "all".
 3. Mine this harness's sessions in that window. One or two hits:
    read them yourself. More: parent spawns read-only slices, per
-   the discovered **mestack** skill's `references/harness.md`.
+   the discovered **kevbot** skill's `references/harness.md`.
    Order by real modification time, not id. Skip the current session
    and obvious noise. Each slice returns: topic, goal, decisions,
    open threads, corrections, artifacts, with a session id.

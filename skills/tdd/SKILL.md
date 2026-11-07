@@ -14,7 +14,7 @@ Make the broken behavior executable before changing production code.
 Skip a new test when the path is expensive, integration-heavy, or
 not requested, and say so.
 
-A mestack **fix** still starts with a repro on the real surface.
+A kevbot **fix** still starts with a repro on the real surface.
 This skill is the loop when that repro is a cheap test.
 
 ## Steps

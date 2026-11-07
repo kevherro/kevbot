@@ -1,6 +1,6 @@
 ---
 name: principle-redesign-from-first-principles
-description: Integrate a requirement as if it had been there on day one. Used by mestack when bolting on would warp the design.
+description: Integrate a requirement as if it had been there on day one. Used by kevbot when bolting on would warp the design.
 user-invocable: false
 ---
 

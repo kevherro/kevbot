@@ -6,16 +6,16 @@
 | `/correct` | Turn the mistakes agents repeat in this repo into ones they cannot make, preferring the strongest enforcement that fits. |
 | `/create-formal-verification-skill` | Write a repo-local formal-<area> skill that machine-checks one high-stakes promise tests rarely exercise, using the verifier that fits the question. |
 | `/create-verification-skill` | Generate a project-local verify-<app> skill that drives this repo's real app the way a user does. |
-| `/figure-it-out` | Design and run an auditable playbook when no narrower mestack playbook fits. |
-| `/help` | Print a table of the current mestack skills and a short description of each. |
+| `/figure-it-out` | Design and run an auditable playbook when no narrower kevbot playbook fits. |
+| `/help` | Print a table of the current kevbot skills and a short description of each. |
 | `/how` | Walk through how a subsystem works now, with runtime flow, types, and the non-obvious parts. |
 | `/in-your-own-words` | Play back the user's goal and the problem behind it before any work. |
 | `/interrogate` | Adversarial review of a change by one child per configured reviewer. |
 | `/ketchup` | Bring the user current on this chat since they last wrote, plainly, then lay out each pending call of theirs with what they need to make it without clicking through. |
+| `/kevbot` | Kevin's harness-agnostic engineering dispatcher. |
 | `/maintain-formal-verification-skill` | Re-sync a repo's formal-* checks with code that moved since their last confirmation: read those commits, update the model from the code, rerun, and classify each failure as drift or bug. |
 | `/maintain-verification-skill` | Keep a project's verify-* skill and feature map honest: source pass per feature, one live drive of every feature, proven corrections only. |
 | `/make-bot-ui` | Build a local page whose buttons start agent work through an available CLI or API, keeping secrets on the server. |
-| `/mestack` | Kevin's harness-agnostic engineering dispatcher. |
 | `/no-comments` | Delete comments that narrate code; keep or encode the ones that constrain. |
 | `/nudge` | Recurring check-in in this session: ask whether to write a paste-ready team update. |
 | `principle-attack-the-premise` | Two fixes on one belief failed the same check; test the belief before a third. |
@@ -45,7 +45,7 @@
 | `/prove` | Verify a change against the real artifact the user will run, not a proxy. |
 | `/recall` | Rebuild recent working context from this harness's sessions and live git/gh state. |
 | `/reflect` | Mine this session for durable lessons and route them into skill edits. |
-| `/setup-mestack` | Configure mestack for this machine: check the install, write optional model overrides, and show how to make /mestack the default. |
+| `/setup-kevbot` | Configure kevbot for this machine: check the install, write optional model overrides, and show how to make /kevbot the default. |
 | `/sharpen` | Make a task deeper rather than larger, then return a rewritten prompt. |
 | `/show-me-your-work` | Keep an append-only TSV decision log for long or unattended runs. |
 | `/tdd` | Write a failing check before production code when the user asked for TDD or a cheap local test exists. |

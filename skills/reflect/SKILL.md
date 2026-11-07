@@ -14,12 +14,12 @@ parent followed.
 
 ## Steps
 
-1. Resolve transcript access through the discovered **mestack**
+1. Resolve transcript access through the discovered **kevbot**
    skill's `references/harness.md`. Match the opening user prompt.
    If no file resolves, write a short digest and use that. Do not
    read other workspaces.
 2. Spawn two or three read-only children in one turn, per the
-   **mestack** skill's `references/harness.md`.
+   **kevbot** skill's `references/harness.md`.
    Models from the `reviewers` list when present; otherwise inherit
    the parent. Dropouts stay named. Lenses:
    - **Judgment.** What should have been a rule, and where it lives.

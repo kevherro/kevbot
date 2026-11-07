@@ -1,6 +1,6 @@
 ---
 name: principle-minimize-reader-load
-description: Cut layers and hidden state a reader must hold. Used by mestack when code is hard to trace.
+description: Cut layers and hidden state a reader must hold. Used by kevbot when code is hard to trace.
 user-invocable: false
 ---
 

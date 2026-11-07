@@ -12,7 +12,7 @@ argument-hint: diff, files, or branch to review
 Stress a change with independent read-only reviewers. The parent
 judges. Do not auto-apply.
 
-The `reviewers` list in the discovered **mestack** skill's
+The `reviewers` list in the discovered **kevbot** skill's
 `references/models.md` is the panel. Empty list: the parent reviews
 once, labeled `parent`.
 A slug this session cannot run uses its declared fallback, else it is
@@ -27,7 +27,7 @@ a dropout. Do not substitute an undeclared model.
    commits, PR body, then the diff. Reviewers challenge fit to
    intent, not the intent itself. If intent is unclear, ask.
 3. Spawn. Parent launches one read-only child per remaining reviewer
-   in one turn, per the **mestack** skill's `references/harness.md`.
+   in one turn, per the **kevbot** skill's `references/harness.md`.
    Read-only reviewers may share a checkout; they must not write.
    Same brief for every child: intent, scope, and
    [references/rubric.md](references/rubric.md). Fill

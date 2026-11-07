@@ -48,8 +48,8 @@ for skill_dir in "$ROOT"/skills/*/; do
   fi
 done
 
-if [[ ! -f "$ROOT/skills/mestack/SKILL.md" ]]; then
-  fail "missing entry skill skills/mestack/SKILL.md"
+if [[ ! -f "$ROOT/skills/kevbot/SKILL.md" ]]; then
+  fail "missing entry skill skills/kevbot/SKILL.md"
 fi
 
 help_list="$ROOT/scripts/list-skills.sh"
@@ -72,7 +72,7 @@ else
 fi
 
 for pb in investigate fix build reshape leave-running; do
-  if [[ ! -f "$ROOT/skills/mestack/playbooks/$pb.md" ]]; then
+  if [[ ! -f "$ROOT/skills/kevbot/playbooks/$pb.md" ]]; then
     fail "missing playbook $pb.md"
   fi
 done
@@ -105,7 +105,7 @@ while IFS= read -r line; do
   [[ -n "$line" ]] || continue
   fail "harness primitive outside adapter references: $line"
 done < <(find "$ROOT/skills" -name '*.md' \
-  ! -path "$ROOT/skills/mestack/references/*" -exec \
+  ! -path "$ROOT/skills/kevbot/references/*" -exec \
   grep -n -E 'spawn_subagent|get_command_or_subagent_output|run_terminal_command|scheduler_create|ask_user_question|`explore`|grok -p|Amp orb' {} + 2>/dev/null || true)
 
 if ! bash "$ROOT/scripts/check-hosted-skills.sh"; then

@@ -1,6 +1,6 @@
 ---
 name: principle-boundary-discipline
-description: Validate at the edge and trust internal types. Used by mestack when wiring CLI, config, network, or framework adapters.
+description: Validate at the edge and trust internal types. Used by kevbot when wiring CLI, config, network, or framework adapters.
 user-invocable: false
 ---
 

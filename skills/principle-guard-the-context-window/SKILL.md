@@ -1,6 +1,6 @@
 ---
 name: principle-guard-the-context-window
-description: Keep bulk out of the parent context. Used by mestack when outputs, files, or fan-out would flood the session.
+description: Keep bulk out of the parent context. Used by kevbot when outputs, files, or fan-out would flood the session.
 user-invocable: false
 ---
 

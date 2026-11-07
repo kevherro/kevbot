@@ -1,6 +1,6 @@
 ---
 name: principle-exhaust-the-design-space
-description: Try two or three real alternatives when there is no precedent. Used by mestack before committing a novel design.
+description: Try two or three real alternatives when there is no precedent. Used by kevbot before committing a novel design.
 user-invocable: false
 ---
 

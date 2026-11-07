@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Link mestack skills into the Agent Skills locations Amp, Grok, and
+# Link kevbot skills into the Agent Skills locations Amp, Grok, and
 # Claude Code scan. Does not edit config.toml, settings.json, AGENTS.md,
 # or CLAUDE.md.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
-AGENTS_SKILLS="${MESTACK_AGENTS_SKILLS:-$HOME/.agents/skills}"
+AGENTS_SKILLS="${KEVBOT_AGENTS_SKILLS:-$HOME/.agents/skills}"
 GROK_HOME="${GROK_HOME:-$HOME/.grok}"
 GROK_SKILLS="$GROK_HOME/skills"
 GROK_AGENTS="$GROK_HOME/agents"
@@ -47,8 +47,8 @@ if [[ -d "$ROOT/agents" ]]; then
   done
 fi
 
-printf '\nmestack installed for this user.\n'
+printf '\nkevbot installed for this user.\n'
 printf 'Amp:    %s\n' "$AGENTS_SKILLS"
 printf 'Grok:   %s and %s\n' "$GROK_SKILLS" "$GROK_AGENTS"
 printf 'Claude: %s and %s\n' "$CLAUDE_SKILLS" "$CLAUDE_AGENTS"
-printf 'Next: open a session and run /setup-mestack\n'
+printf 'Next: open a session and run /setup-kevbot\n'

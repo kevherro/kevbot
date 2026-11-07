@@ -1,6 +1,6 @@
 ---
 name: principle-make-operations-idempotent
-description: Retries must land on the same end state. Used by mestack when designing commands, startup, or processing loops.
+description: Retries must land on the same end state. Used by kevbot when designing commands, startup, or processing loops.
 user-invocable: false
 ---
 

@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-# mestack has no services, tunnels, or credentials to restore.
+# kevbot has no services, tunnels, or credentials to restore.
 set -euo pipefail
 exit 0

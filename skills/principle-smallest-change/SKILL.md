@@ -1,6 +1,6 @@
 ---
 name: principle-smallest-change
-description: Bias toward deletion and the smallest diff that solves the problem. Used by mestack when sizing a change.
+description: Bias toward deletion and the smallest diff that solves the problem. Used by kevbot when sizing a change.
 user-invocable: false
 ---
 

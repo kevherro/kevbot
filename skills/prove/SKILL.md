@@ -2,7 +2,7 @@
 name: prove
 description: >
   Verify a change against the real artifact the user will run, not a
-  proxy. Use for /prove, "verify this", or when a mestack playbook
+  proxy. Use for /prove, "verify this", or when a kevbot playbook
   says to prove the work.
 argument-hint: behavior to prove
 ---

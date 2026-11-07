@@ -22,7 +22,7 @@ orb.
    - Missing or unparseable: ask once. Do not invent a default.
 
 2. Resolve **current-session schedule** through
-   the discovered **mestack** skill's `references/harness.md`.
+   the discovered **kevbot** skill's `references/harness.md`.
    Need a recurring prompt in this transcript, plus a blocking
    yes/no. A background child is not this. If unavailable, say so
    and stop.

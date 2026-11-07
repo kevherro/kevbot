@@ -19,7 +19,7 @@ what to delete.
 
 1. Scope. Caller files or diff. Else the working tree against `main`.
 2. Spawn one read-only child, per
-   the discovered **mestack** skill's `references/harness.md`.
+   the discovered **kevbot** skill's `references/harness.md`.
    Pass the scope. Ask for each comment: `path:line`,
    text, verdict `delete` / `keep` / `encode`. A keep needs proof
    the comment is about something this repo cannot change (license,

@@ -1,6 +1,6 @@
 ---
 name: principle-type-system-discipline
-description: Make illegal states unrepresentable and refuse to lie to the compiler. Used by mestack when designing types or signatures.
+description: Make illegal states unrepresentable and refuse to lie to the compiler. Used by kevbot when designing types or signatures.
 user-invocable: false
 ---
 

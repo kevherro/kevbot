@@ -6,7 +6,7 @@ Use `spawn_subagent`.
 
 | Field | Value |
 | --- | --- |
-| `subagent_type` | `mestack-agent` for work that must follow mestack. `explore` for read-only search. `general-purpose` only when the child must edit and mestack-agent is unavailable. |
+| `subagent_type` | `kevbot-agent` for work that must follow kevbot. `explore` for read-only search. `general-purpose` only when the child must edit and kevbot-agent is unavailable. |
 | `background` | `true` for fan-out. Drain with `get_command_or_subagent_output`. |
 | `isolation` | `worktree` for any writer. `none` for read-only. |
 | `model` | Only a slug from [models.md](models.md) that this session can actually run. Omit to inherit the parent. |

@@ -1,6 +1,6 @@
 ---
 name: principle-outcome-oriented-execution
-description: Converge on the target design, not throwaway in-between states. Used by mestack during planned rewrites and migrations.
+description: Converge on the target design, not throwaway in-between states. Used by kevbot during planned rewrites and migrations.
 user-invocable: false
 ---
 

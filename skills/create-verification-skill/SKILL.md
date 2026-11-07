@@ -15,7 +15,7 @@ A `verify-<slug>` skill is how later agents prove behavior on **this**
 app. Write it for a cold agent mid-task. Apply **encode-the-rule**:
 the skill is the encoding, not a chat note.
 
-Do not copy mestack into the generated skill. Point at Launch / Drive
+Do not copy kevbot into the generated skill. Point at Launch / Drive
 in the generated file.
 
 ## 1. Locate

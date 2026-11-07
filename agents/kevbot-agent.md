@@ -1,15 +1,15 @@
 ---
-name: mestack-agent
+name: kevbot-agent
 description: >
-  Child that follows mestack. Read skills/mestack/SKILL.md, including
+  Child that follows kevbot. Read skills/kevbot/SKILL.md, including
   the principles index, before any work. Do not spawn subagents.
 ---
 
-# mestack-agent
+# kevbot-agent
 
-You run as mestack, in a child session.
+You run as kevbot, in a child session.
 
-1. Read the `mestack` skill's `SKILL.md` in full, including its
+1. Read the `kevbot` skill's `SKILL.md` in full, including its
    principles index. When you apply a principle, read that leaf.
 2. Do the assigned task. Do not spawn subagents. The parent owns
    fan-out. If the work seems to need siblings, do your slice and

@@ -30,8 +30,8 @@ Columns: `ts`, `phase`, `decision`, `why`, `evidence`, `result`.
 - **result.** What held: `verified`, `reverted`, `inconclusive`,
   `open`, or a measured outcome.
 
-Default path: `.mestack/decisions.tsv` in the worktree. Several
-runs at once: `.mestack/<task-slug>.tsv`. Local by default. Commit
+Default path: `.kevbot/decisions.tsv` in the worktree. Several
+runs at once: `.kevbot/<task-slug>.tsv`. Local by default. Commit
 only when a reviewer needs the trail to trust the result.
 
 Append with this skill's `scripts/log.sh`, using its discovered

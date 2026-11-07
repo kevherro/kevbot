@@ -1,6 +1,6 @@
 ---
 name: principle-migrate-callers-then-delete-legacy-apis
-description: Migrate callers and delete the old API in one wave. Used by mestack when replacing an internal interface.
+description: Migrate callers and delete the old API in one wave. Used by kevbot when replacing an internal interface.
 user-invocable: false
 ---
 

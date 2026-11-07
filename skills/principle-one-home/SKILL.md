@@ -1,6 +1,6 @@
 ---
 name: principle-one-home
-description: Each fact has one owner. Point at it; do not copy it. Used by mestack when editing skills or moving code.
+description: Each fact has one owner. Point at it; do not copy it. Used by kevbot when editing skills or moving code.
 user-invocable: false
 ---
 

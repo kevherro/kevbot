@@ -1,6 +1,6 @@
 ---
 name: principle-explain-the-number
-description: Name what bounds a measured number and what else it could be measuring before you report it. Used by mestack for speedups, regressions, latency, and eval results.
+description: Name what bounds a measured number and what else it could be measuring before you report it. Used by kevbot for speedups, regressions, latency, and eval results.
 user-invocable: false
 ---
 

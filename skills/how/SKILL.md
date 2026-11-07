@@ -3,7 +3,7 @@ name: how
 description: >
   Walk through how a subsystem works now, with runtime flow, types, and
   the non-obvious parts. Use for /how, "how does this work", or when
-  mestack needs to understand a path before editing.
+  kevbot needs to understand a path before editing.
 argument-hint: subsystem or question
 ---
 
@@ -16,7 +16,7 @@ Read-only understanding. No edits.
 1. Restate the question and the subsystem boundary.
 2. If the area is large (several packages or an unclear entrypoint),
    spawn two to four read-only explorers from the parent, per
-   the discovered **mestack** skill's `references/harness.md`.
+   the discovered **kevbot** skill's `references/harness.md`.
    Partition by entrypoint or package. Each explorer returns paths,
    types, and a flow in a few paragraphs. The parent reads the code
    they cite.
@@ -28,4 +28,4 @@ Read-only understanding. No edits.
      ordering)
    - open questions
 5. Stay read-only. If the user also asked for a change, return to
-   mestack and pick `fix`, `build`, or `reshape`.
+   kevbot and pick `fix`, `build`, or `reshape`.

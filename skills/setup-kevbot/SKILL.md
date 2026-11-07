@@ -1,17 +1,17 @@
 ---
-name: setup-mestack
+name: setup-kevbot
 description: >
-  Configure mestack for this machine: check the install, write optional
-  model overrides, and show how to make /mestack the default. Use for
-  /setup-mestack or "configure mestack".
+  Configure kevbot for this machine: check the install, write optional
+  model overrides, and show how to make /kevbot the default. Use for
+  /setup-kevbot or "configure kevbot".
 ---
 
-# Setup mestack
+# Setup kevbot
 
 ## 1. Check the install
 
 Resolve the current session's capabilities through the discovered
-**mestack** skill's `references/harness.md`. Confirm the dispatcher
+**kevbot** skill's `references/harness.md`. Confirm the dispatcher
 can read its bundled playbooks and references. A source checkout,
 symlink, directly loaded file, or managed copy is valid; it need not
 point at this repo's `skills/` tree.
@@ -23,28 +23,28 @@ the same directories. Do not run `install.sh` unless the user asks.
 
 ## 2. Models
 
-Read `~/.agents/mestack-models.md` if it exists. Otherwise start from
+Read `~/.agents/kevbot-models.md` if it exists. Otherwise start from
 the default shape in
-the **mestack** skill's `references/models.md`.
+the **kevbot** skill's `references/models.md`.
 
 Show the current mapping (`code`, `judgment`, `reviewers`). Ask
 whether to keep inherit-parent for everything or set specific slugs
 this session can actually run. Never write a slug you have not seen
 in this session's model list.
 
-Write `~/.agents/mestack-models.md` in the shape from
-the **mestack** skill's `references/models.md`.
+Write `~/.agents/kevbot-models.md` in the shape from
+the **kevbot** skill's `references/models.md`.
 Overwrite the whole file so reruns stay idempotent.
 
 ## 3. Optional default routing
 
-If they want mestack on every non-trivial task, show this block and
+If they want kevbot on every non-trivial task, show this block and
 ask where to put it in a rules file the current harness actually loads.
 Do not write it without a yes:
 
 ```text
 Non-trivial engineering work (bug, feature, refactor, investigation):
-read and follow the mestack skill before acting. Casual questions stay
+read and follow the kevbot skill before acting. Casual questions stay
 ordinary chat. The user can opt out for a turn by saying so.
 ```
 

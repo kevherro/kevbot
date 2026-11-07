@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Prepare a mestack orb. Markdown and shell scripts only: no package
+# Prepare a kevbot orb. Markdown and shell scripts only: no package
 # manager, language toolchain, or backing service.
 set -euo pipefail
 

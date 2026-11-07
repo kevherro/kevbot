@@ -1,6 +1,6 @@
-# Why mestack is shaped this way
+# Why kevbot is shaped this way
 
-Mestack is one skill tree that different agent harnesses load. Skills
+Kevbot is one skill tree that different agent harnesses load. Skills
 are procedures. This file is the argument for the load-bearing
 choices. If a rule and this memo disagree, the skill that owns the
 rule wins; fix this file.
@@ -15,7 +15,7 @@ two failures illegal.
 You ask:
 
 ```text
-/mestack the export writes duplicate rows when a retry lands mid-run.
+/kevbot the export writes duplicate rows when a retry lands mid-run.
 repro first, then fix and verify. text output stays byte-identical
 when --json is off.
 ```
@@ -41,7 +41,7 @@ fixes the first. A project `verify-*` skill fixes the second.
 
 1. **One skill tree, any capable harness.** Sessions load the same
    `SKILL.md` files. Harness tool names live only in
-   `skills/mestack/references/`.
+   `skills/kevbot/references/`.
 2. **The parent owns every spawn.** Children never spawn. Writers do
    not share a writable path.
 3. **One home per fact.** A search path, a playbook step, a model
@@ -62,7 +62,7 @@ nested delegation is supported.
 
 ### Dispatcher
 
-`/mestack` matches a playbook and copies its steps into the todo
+`/kevbot` matches a playbook and copies its steps into the todo
 list. Principles are leaves; the dispatcher only indexes them. If
 the work is "understand / change / prove" on the export bug, the
 playbook is `fix`: reproduce on the binary, patch the cause, prove
@@ -121,7 +121,7 @@ Outcomes are `clean`, `changed`, or `blocked`.
 **Vendor pstack or open-pstack.** pstack is MIT; copying is legal.
 Its skill bodies name Cursor `Task`, sticky mode, cloud agents, and
 `~/.cursor/rules/*.mdc`. Those strings do not resolve here. A
-mechanical substitute table is a second product to sync. mestack
+mechanical substitute table is a second product to sync. kevbot
 keeps the problem (throughput without a checkable finish condition)
 and keeps harness-specific primitives in optional adapters. The cost
 is less playbook coverage (no arena or
@@ -132,7 +132,7 @@ Ideas still flow one way, rewritten rather than copied. The last
 review covered pstack in `cursor/plugins` through `4ec7ffa`
 (2026-10-22). Not taken from that pass: `statechart` (a large
 TLA+-to-Mermaid toolkit; revisit if formal checks become routine
-here) and `poteto-help` (`/help` and `/setup-mestack` cover it). The
+here) and `poteto-help` (`/help` and `/setup-kevbot` cover it). The
 next sync starts from that commit:
 `git log 4ec7ffa..origin/main -- pstack`.
 
@@ -155,7 +155,7 @@ write is a second home.
 
 ## Limits
 
-There is no eval in this repo that mestack reduces defect rate or
+There is no eval in this repo that kevbot reduces defect rate or
 token cost against a bare session. The claim is narrower: the
 illegal states above cannot be produced while the skills are
 followed.
@@ -172,7 +172,7 @@ not establish that every harness discovers skills or follows them.
 
 ## Conclusion
 
-Load mestack as skills. Run `/mestack` for non-trivial work. Put
+Load kevbot as skills. Run `/kevbot` for non-trivial work. Put
 app-specific drive recipes in the app repo under
 `.agents/skills/verify-<app>/`. Keep arguments in this file and
 orders in `SKILL.md`.

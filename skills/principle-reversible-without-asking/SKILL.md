@@ -1,6 +1,6 @@
 ---
 name: principle-reversible-without-asking
-description: Do reversible work, then show the result. Used by mestack instead of permission-asking.
+description: Do reversible work, then show the result. Used by kevbot instead of permission-asking.
 user-invocable: false
 ---
 

@@ -1,15 +1,15 @@
-# mestack
+# kevbot
 
 Harness-agnostic engineering skills. Load the same Markdown procedures
 in an agent that can read instructions and use tools. Optional adapters
 cover Amp and Grok Build; other harnesses use the capability contract in
-[references/harness.md](skills/mestack/references/harness.md).
+[references/harness.md](skills/kevbot/references/harness.md).
 
 ```text
-/mestack <goal, and how you will know it is done>
+/kevbot <goal, and how you will know it is done>
 ```
 
-`/mestack` picks a playbook, applies the principles that change a
+`/kevbot` picks a playbook, applies the principles that change a
 decision, and keeps subagent fan-out in the parent. Why that shape:
 [docs/why.md](docs/why.md).
 
@@ -18,7 +18,7 @@ decision, and keeps subagent fan-out in the parent. Why that shape:
 Point your harness's skill search path at this repo's `skills/`, or
 symlink its skill directories into a location your harness discovers.
 Without skill discovery, ask the agent to read
-`skills/mestack/SKILL.md` by absolute path and follow its linked files.
+`skills/kevbot/SKILL.md` by absolute path and follow its linked files.
 Slash commands depend on the harness. Delegation, model selection,
 transcript access, and unattended continuation are optional capabilities;
 the capability contract defines fallbacks and blocked cases.
@@ -31,7 +31,7 @@ directories:
 ```
 
 Symlinks `skills/*` into `~/.agents/skills/`, `~/.grok/skills/`, and
-`~/.claude/skills/`, `agents/mestack-agent.md` into
+`~/.claude/skills/`, `agents/kevbot-agent.md` into
 `~/.grok/agents/` and `~/.claude/agents/`, and the Claude-only
 reviewers in `agents/claude/` into `~/.claude/agents/`. Honors
 `CLAUDE_CONFIG_DIR` and `GROK_HOME`. Skips any destination that
@@ -42,16 +42,16 @@ skills appear.
 Grok, as a plugin instead of (or besides) the links:
 
 ```bash
-grok plugin install /Users/kevin/src/mestack --trust
+grok plugin install . --trust
 ```
 
-Amp on this machine: the `~/.agents/skills` links, or add
-`~/src/mestack/skills` to its skill path.
+Amp on this machine: the `~/.agents/skills` links, or add this repo's
+`skills/` directory to its skill path.
 
 For Amp orbs and other machines, ask Amp:
 
 ```text
-Publish this mestack skill pack to my Amp personal skills repository.
+Publish this kevbot skill pack to my Amp personal skills repository.
 ```
 
 Copy all `skills/*` directories to that repository's top level, not
@@ -65,16 +65,16 @@ See [Amp's skills documentation](https://ampcode.com/docs/customize/skills).
 ## Setup
 
 ```text
-/setup-mestack
+/setup-kevbot
 ```
 
-Writes `~/.agents/mestack-models.md` if you want per-role model
+Writes `~/.agents/kevbot-models.md` if you want per-role model
 overrides. Offers a project `verify-*` skill when the current repo
 has a runnable app and none exists. Optional always-on routing:
 
 ```text
 Non-trivial engineering work (bug, feature, refactor, investigation):
-read and follow the mestack skill before acting. Casual questions stay
+read and follow the kevbot skill before acting. Casual questions stay
 ordinary chat. The user can opt out for a turn by saying so.
 ```
 
@@ -84,8 +84,8 @@ Put that in a user or project instructions file your harness loads.
 
 | Command | When |
 | --- | --- |
-| `/mestack` | Non-trivial engineering work |
-| `/help` | List mestack skills |
+| `/kevbot` | Non-trivial engineering work |
+| `/help` | List kevbot skills |
 | `/how` | Walk a subsystem, read-only |
 | `/prove` | Exercise the real artifact |
 | `/figure-it-out` | No narrower playbook fits |
@@ -102,7 +102,7 @@ Put that in a user or project instructions file your harness loads.
 | `/nudge` | Nudge every N minutes; Yes writes a team update |
 | `/create-verification-skill` | Repo has an app and no `verify-*` yet |
 | `/maintain-verification-skill` | That skill or its map drifted |
-| `/setup-mestack` | Install check and model sheet |
+| `/setup-kevbot` | Install check and model sheet |
 | `/ketchup` | Catch up on this chat; list your pending calls |
 | `/in-your-own-words` | Play back the goal before work |
 | `/sharpen` | Rewrite a prompt to ask for a deeper task |
@@ -112,7 +112,7 @@ Put that in a user or project instructions file your harness loads.
 | `/maintain-formal-verification-skill` | That formal check drifted from the code |
 | `/benjify` | Animated product-UI scene in an iPhone app (SwiftUI) |
 
-Playbooks behind `/mestack`: `investigate`, `fix`, `build`,
+Playbooks behind `/kevbot`: `investigate`, `fix`, `build`,
 `reshape`, `leave-running`.
 
 `/prove` prefers `<repo>/.agents/skills/verify-<app>/`, then an
@@ -123,21 +123,21 @@ feature before handoff. Details: [docs/why.md](docs/why.md).
 ## Layout
 
 ```text
-skills/mestack/                            dispatcher, playbooks, adapters
+skills/kevbot/                             dispatcher, playbooks, adapters
 skills/principle-*/                        one rule each; slash-hidden
-skills/how prove setup-mestack help
+skills/how prove setup-kevbot help
 skills/<name>/                             situational; /help lists them
 skills/create-verification-skill/          owns verify-* contract
 skills/maintain-verification-skill/
 skills/create-formal-verification-skill/   owns formal-* contract
 skills/maintain-formal-verification-skill/
 skills/benjify/                            skill + StageshowKit Swift package (iOS 27)
-agents/mestack-agent.md                    Grok child; no nested spawn
+agents/kevbot-agent.md                     Grok child; no nested spawn
 agents/claude/                             Claude-only reviewer agents
 docs/why.md                                design argument
 ```
 
-Harness tool names live only in `skills/mestack/references/`.
+Harness tool names live only in `skills/kevbot/references/`.
 
 ## Status
 

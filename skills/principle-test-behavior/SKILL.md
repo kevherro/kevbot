@@ -1,6 +1,6 @@
 ---
 name: principle-test-behavior
-description: A test asserts what callers can observe; it fails when behavior breaks and survives a refactor. Used by mestack when writing, changing, or keeping a test.
+description: A test asserts what callers can observe; it fails when behavior breaks and survives a refactor. Used by kevbot when writing, changing, or keeping a test.
 user-invocable: false
 ---
 

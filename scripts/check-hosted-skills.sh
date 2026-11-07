@@ -3,7 +3,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-fixture="$(mktemp -d "${TMPDIR:-/tmp}/mestack-hosted.XXXXXX")"
+fixture="$(mktemp -d "${TMPDIR:-/tmp}/kevbot-hosted.XXXXXX")"
 trap 'rm -r "$fixture"' EXIT
 errors=0
 
@@ -56,10 +56,10 @@ elif ! diff -u "$fixture/expected.md" "$fixture/actual.md"; then
 fi
 
 if ! (cd "$fixture/worktree" && bash "$log_dir/scripts/log.sh" \
-  .mestack/decisions.tsv verify decision why evidence verified); then
+  .kevbot/decisions.tsv verify decision why evidence verified); then
   fail 'hosted decision log failed'
 elif ! awk -F '\t' 'NF != 6 { exit 1 } END { if (NR != 2) exit 1 }' \
-  "$fixture/worktree/.mestack/decisions.tsv"; then
+  "$fixture/worktree/.kevbot/decisions.tsv"; then
   fail 'hosted decision log did not write a header and six-column record'
 fi
 

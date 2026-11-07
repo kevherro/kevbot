@@ -1,6 +1,6 @@
 ---
 name: principle-build-the-lever
-description: Build a rerunnable tool for non-trivial work. Used by mestack when hand-applying a recipe would be the artifact.
+description: Build a rerunnable tool for non-trivial work. Used by kevbot when hand-applying a recipe would be the artifact.
 user-invocable: false
 ---
 

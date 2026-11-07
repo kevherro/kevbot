@@ -24,7 +24,7 @@ orb is the machine. The playbook is the contract.
 
 ## Model sheet
 
-Read `~/.agents/mestack-models.md` when present. Amp-native models run
+Read `~/.agents/kevbot-models.md` when present. Amp-native models run
 in-process. A role that names a model this Amp session cannot run is a
 dropout.
 

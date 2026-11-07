@@ -1,8 +1,8 @@
 {
-  "name": "mestack",
-  "displayName": "mestack",
+  "name": "kevbot",
+  "displayName": "kevbot",
   "version": "0.2.0",
-  "description": "Rigor-first agent workflows for Amp and Grok Build. Entry point: /mestack.",
+  "description": "Rigor-first agent workflows for Amp and Grok Build. Entry point: /kevbot.",
   "license": "MIT",
   "skills": "./skills/",
   "agents": "./agents/"

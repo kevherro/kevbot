@@ -1,6 +1,6 @@
 ---
 name: principle-separate-before-serializing-shared-state
-description: Give concurrent writers their own state before adding locks. Used by mestack when two actors might mutate the same file, branch, or object.
+description: Give concurrent writers their own state before adding locks. Used by kevbot when two actors might mutate the same file, branch, or object.
 user-invocable: false
 ---
 

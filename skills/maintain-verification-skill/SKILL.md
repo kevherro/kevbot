@@ -45,7 +45,7 @@ Pick one and say it:
    missing, extra, duplicate, or dead entries. Lightweight.
 
 2. **Source wave.** Parent spawns one read-only explorer per feature
-   file, per the discovered **mestack** skill's `references/harness.md`.
+   file, per the discovered **kevbot** skill's `references/harness.md`.
    Each returns: how the feature works in source, likely drift with
    citations, one live-drive recipe. Children never drive the app and
    never edit. Parent reads the cited code.

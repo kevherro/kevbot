@@ -1,6 +1,6 @@
 ---
 name: principle-encode-the-rule
-description: Encode a repeated instruction as a check, not more prose. Used by mestack when a lesson would otherwise stay in chat.
+description: Encode a repeated instruction as a check, not more prose. Used by kevbot when a lesson would otherwise stay in chat.
 user-invocable: false
 ---
 
@@ -20,5 +20,5 @@ rule must stay prose, put it where the agent will read it and show the
 failure it prevents. The **correct** skill runs this ladder over a
 repo.
 
-If the rule is mestack-wide, it belongs in a principle or playbook,
+If the rule is kevbot-wide, it belongs in a principle or playbook,
 in one place.

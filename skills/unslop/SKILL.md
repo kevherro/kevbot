@@ -9,7 +9,7 @@ description: >
 
 Edit writing a human will read. Preserve meaning.
 
-This is not a second mestack reply contract. Status lines and
+This is not a second kevbot reply contract. Status lines and
 playbook reports stay short and declarative. Teach, docs, and other
 user-facing prose use this skill.
 

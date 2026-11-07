@@ -1,7 +1,7 @@
 ---
 name: figure-it-out
 description: >
-  Design and run an auditable playbook when no narrower mestack
+  Design and run an auditable playbook when no narrower kevbot
   playbook fits. Use for /figure-it-out, a large migration, or work a
   human will review after stepping away.
 disable-model-invocation: true
@@ -23,7 +23,7 @@ work. Do not invent a second overnight contract.
 
 ## Steps
 
-1. Read the Principles index in the **mestack** skill. Name each
+1. Read the Principles index in the **kevbot** skill. Name each
    principle that changes a decision.
 2. Frame, then stop long enough to say it:
    - Done as a falsifiable predicate (**prove-on-the-artifact**).

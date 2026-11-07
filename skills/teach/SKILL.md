@@ -11,7 +11,7 @@ argument-hint: thing to teach
 
 They should understand the thing. You should not change it.
 
-There is no mestack **why** skill. **how** owns mechanism. Git
+There is no kevbot **why** skill. **how** owns mechanism. Git
 history, commit messages, and docs own motivation. If motivation is
 not in those, say unknown.
 

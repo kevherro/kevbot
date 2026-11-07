@@ -1,6 +1,6 @@
 ---
 name: principle-named-shape
-description: Name the data and its invariant before writing logic. Used by mestack before implementation.
+description: Name the data and its invariant before writing logic. Used by kevbot before implementation.
 user-invocable: false
 ---
 

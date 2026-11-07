@@ -1,4 +1,4 @@
-# mestack
+# kevbot
 
 Personal agent skill pack. Markdown and a few shell scripts. No
 build, no tests beyond `scripts/check-skills.sh`, no dependencies.
@@ -7,12 +7,12 @@ build, no tests beyond `scripts/check-skills.sh`, no dependencies.
 
 | Path | Owns |
 | --- | --- |
-| `skills/mestack/SKILL.md` | Dispatcher: playbook match, principle index, reply shape. |
-| `skills/mestack/playbooks/` | Numbered steps copied into the todo list verbatim. |
-| `skills/mestack/references/` | Harness and model translation. The only place Amp/Grok tool names live. |
+| `skills/kevbot/SKILL.md` | Dispatcher: playbook match, principle index, reply shape. |
+| `skills/kevbot/playbooks/` | Numbered steps copied into the todo list verbatim. |
+| `skills/kevbot/references/` | Harness and model translation. The only place Amp/Grok tool names live. |
 | `skills/principle-*/SKILL.md` | One rule per directory. |
-| `skills/help` | Catalog of current mestack skills. |
-| `skills/how`, `prove`, `setup-mestack` | Situational skills the dispatcher calls. |
+| `skills/help` | Catalog of current kevbot skills. |
+| `skills/how`, `prove`, `setup-kevbot` | Situational skills the dispatcher calls. |
 | other `skills/*` | User-invocable procedures. `/help` lists them. Dispatcher names the ones it routes to. |
 | `skills/create-verification-skill/` | Generator for a project-local `verify-<app>` skill. Owns location, generated-skill contract, and feature-map shape. |
 | `skills/maintain-verification-skill/` | Upkeep loop for that project skill. Points at create's references. |

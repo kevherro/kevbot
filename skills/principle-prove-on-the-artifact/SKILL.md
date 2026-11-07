@@ -1,6 +1,6 @@
 ---
 name: principle-prove-on-the-artifact
-description: Verify against the real running artifact, not a proxy. Used by mestack before declaring done.
+description: Verify against the real running artifact, not a proxy. Used by kevbot before declaring done.
 user-invocable: false
 ---
 
