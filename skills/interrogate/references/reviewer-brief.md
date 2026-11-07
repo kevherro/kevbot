@@ -11,6 +11,9 @@ Intent:
 Scope (read these; the diff is the change):
 <paths or git diff command>
 
+Baseline:
+<before revision and separate checkout path, or why unavailable>
+
 Workspace:
 <absolute path to this reviewer's isolated worktree or copy>
 
@@ -22,9 +25,17 @@ For a design, exercise a small prototype or probe the current code.
 A finding needs a run showing behavior that contradicts the intent.
 Omit opinions about style and claims you have not exercised.
 
+For each failure, run the same scenario on the baseline when
+available. Report whether the change introduced, copied, or newly
+exposed it, left a promised fix incomplete, or did not affect it.
+Use the changed entry path as evidence. A baseline setup failure
+limits the comparison; it does not prove an existing bug. Mark the
+origin unknown when the evidence cannot establish it.
+
 Return only:
 - findings: title, exact command, working directory, prerequisites,
-  actual output, expected output, intent violated, evidence paths
+  actual and expected output on both snapshots, relation to the
+  change, intent violated, evidence paths
 - artifacts: paths to any repros needed for the parent's rerun
 - coverage: what you exercised and what you could not check
 - no demonstrated failures when none were found

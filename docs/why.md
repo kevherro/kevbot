@@ -137,8 +137,9 @@ next sync starts from that commit:
 `git log 4ec7ffa..origin/main -- pstack`.
 
 The 2026-11-07 updates selectively adapted review verification,
-measurement planning, and task framing from `ab1f702`, plus durable
-reflection edits from `7054003`. Reproduced failures carry more weight than reviewer
+failure attribution, verification scope, measurement planning, and
+task framing from `ab1f702`, plus durable reflection edits from
+`7054003`. Reproduced failures carry more weight than reviewer
 agreement; choosing a threshold before measuring limits hindsight;
 durable skill copies survive plugin updates. This was a partial
 sync, so the full-review baseline remains `4ec7ffa`.
@@ -147,6 +148,11 @@ Keeping the user's goal visible through delegation and reporting
 makes it easier to spot work that drifted from the request. The
 dispatcher owns that framing so individual playbooks do not grow
 competing versions of it.
+
+Comparing failures with the baseline separates a patch's defects
+from unrelated existing debt. Matching verification to the affected
+behavior avoids repeating work that cannot add evidence, while a
+changed command or instruction still earns a behavioral check.
 
 **Let children spawn.** That matches "a fixer with its own
 reviewer." On Grok it does not run. On Amp it still puts the
