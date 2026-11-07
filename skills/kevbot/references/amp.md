@@ -13,6 +13,9 @@ not visible unless you send them.
 Fan-out is several threads at once, then the parent synthesizes. Do
 not serialize independent slices without a reason.
 
+Use the session's documented continuation controls under
+[Worker dispatch](harness.md#worker-dispatch) for follow-ups too.
+
 A second opinion, when Amp exposes an oracle or equivalent, is one
 extra read-only thread with the same rubric. It does not apply
 changes.
@@ -25,8 +28,8 @@ orb is the machine. The playbook is the contract.
 ## Model sheet
 
 Read `~/.agents/kevbot-models.md` when present. Amp-native models run
-in-process. A role that names a model this Amp session cannot run is a
-dropout.
+in-process. Resolve unavailable or rejected choices through
+[models.md](models.md), including its declared fallbacks.
 
 ## Sessions
 

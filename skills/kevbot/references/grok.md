@@ -9,7 +9,11 @@ Use `spawn_subagent`.
 | `subagent_type` | `kevbot-agent` for work that must follow kevbot. `explore` for read-only search. `general-purpose` only when the child must edit and kevbot-agent is unavailable. |
 | `background` | `true` for fan-out. Drain with `get_command_or_subagent_output`. |
 | `isolation` | `worktree` for any writer. `none` for read-only. |
-| `model` | Only a slug from [models.md](models.md) that this session can actually run. Omit to inherit the parent. |
+| `model` | Resolve the role through [models.md](models.md). Omit only for configured or default inheritance, or an agent type that pins its model. |
+
+For steering and resuming, follow
+[Worker dispatch](harness.md#worker-dispatch). Use `background: true`
+only when the current continuation tool documents that option.
 
 Grok children cannot spawn. If you are already a child, do the work
 yourself.

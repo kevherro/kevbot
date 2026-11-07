@@ -138,7 +138,8 @@ next sync starts from that commit:
 
 The 2026-11-07 updates selectively adapted review verification,
 failure attribution, verification scope, measurement planning, and
-task framing from `ab1f702`, plus durable reflection edits from
+task framing from `ab1f702`, along with rejection memory and
+nonblocking worker follow-ups, plus durable reflection edits from
 `7054003`. Reproduced failures carry more weight than reviewer
 agreement; choosing a threshold before measuring limits hindsight;
 durable skill copies survive plugin updates. This was a partial
@@ -153,6 +154,11 @@ Comparing failures with the baseline separates a patch's defects
 from unrelated existing debt. Matching verification to the affected
 behavior avoids repeating work that cannot add evidence, while a
 changed command or instruction still earns a behavioral check.
+
+Session-local rejection memory prevents repeated invalid dispatches
+without changing the user's configured model choices. Nonblocking
+follow-ups keep the coordinator available for other workers' reports;
+they do not require another worker or a different ownership model.
 
 **Let children spawn.** That matches "a fixer with its own
 reviewer." On Grok it does not run. On Amp it still puts the

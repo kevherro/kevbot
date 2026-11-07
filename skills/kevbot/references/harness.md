@@ -48,6 +48,21 @@ in this session; unknown is not permission to guess a tool or command.
 
 These fallbacks apply wherever a skill calls for the capability.
 
+## Worker dispatch
+
+Use nonblocking native dispatch for starting, steering, and resuming
+workers when the tool supports it. Return control after submitting
+the work, then handle ready reports and independent work. Collect
+completion separately; wait when further progress depends on that
+worker and no independent work or unread reports remain. A dispatch
+acknowledgement is not evidence that the work finished.
+
+If continuation is synchronous-only, report that limitation and
+process ready reports and independent work before a necessary
+blocking call. Use only documented options. Do not invent an async
+flag or start a duplicate worker to simulate background continuation.
+The shared contract below still decides whether to reuse a worker.
+
 ## Shared contract
 
 1. The parent session owns every spawn. Children never spawn.
