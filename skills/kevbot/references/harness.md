@@ -53,8 +53,9 @@ These fallbacks apply wherever a skill calls for the capability.
 1. The parent session owns every spawn. Children never spawn.
 2. Each writer gets its own worktree or output directory. Shared
    writable paths across siblings are forbidden.
-3. A child prompt is self-contained: goal, scope, how to verify, where
-   to write, what to report. File pointers, not pasted dumps.
+3. A child prompt is self-contained: the user's overall goal, the
+   child's scope, how to verify, where to write, what to report. Frame it per
+   [Task framing](../SKILL.md#task-framing). File pointers, not pasted dumps.
 4. Review the child's diff yourself. Do not pass through its summary.
 5. A missing model, failed child, or dropped worker is a named dropout.
    Use only fallbacks declared in [models.md](models.md), and name them

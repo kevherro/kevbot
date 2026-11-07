@@ -6,7 +6,7 @@ Fill and send. Do not add a persona. Do not ask the child to spawn.
 Try to demonstrate a failure in the scoped change. Do not spawn.
 
 Intent:
-<one paragraph>
+<the user's goal and the purpose of this change, in one paragraph>
 
 Scope (read these; the diff is the change):
 <paths or git diff command>

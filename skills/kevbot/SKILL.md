@@ -14,6 +14,23 @@ argument-hint: goal and how you will know it is done
 Read [references/harness.md](references/harness.md) once per task to
 resolve available capabilities and fallbacks before choosing tools.
 
+## Task framing
+
+In the first message on a task, explain in your own words the user's
+goal and the problem it addresses. For a requested change, name the smallest
+edit you expect to solve it. Use known context and identify assumptions.
+Continue authorized work without asking the user to confirm this
+restatement.
+
+If evidence rules out the requested change, show the evidence and
+stop that change.
+
+Carry the user's goal into every subagent brief. Lead each PR's Why
+section, or its opening rationale when no template applies, with
+that goal. Open final reports, including the final reply, with the
+goal and the outcome achieved. For a fully specified one-line edit,
+the final reply can simply confirm the change.
+
 ## Start
 
 1. Open a todo list. First item: read the Principles index below.
